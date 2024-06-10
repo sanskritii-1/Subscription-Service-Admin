@@ -1,6 +1,7 @@
 import express, { Request, Response, Express } from 'express';
 import cors from "cors";
 import connectDB from './config/dbConfig';
+import userRouter from './routes/userRouter'
 
 // Create an Express application
 const app:Express = express();
@@ -14,5 +15,5 @@ connectDB();
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello, TypeScript + Node.js + Express!');
 });
-
+app.use("/api", userRouter);
 export default app;
