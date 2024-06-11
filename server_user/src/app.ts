@@ -1,7 +1,7 @@
 import express, { Request, Response, Express } from 'express';
 import cors from "cors";
 import connectDB from './config/dbConfig';
-import userRouter from './routes/userRouter'
+import userRouter from './routes/user'
 
 // Create an Express application
 const app:Express = express();
