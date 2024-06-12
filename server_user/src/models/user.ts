@@ -1,23 +1,18 @@
-import { Schema, model } from 'mongoose';
- 
-const userSchema = new Schema({
-    name: {
-      type: String,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-      },
-      password: {
-        type: String,
-        required: true,
-      },
-      confirmPassword: {
-        type: String,
-      },
+import { Schema, model, Document } from 'mongoose';
+
+export interface UserDocument extends Document {
+  name: string;
+  email: string;
+  password: string;
+  isAdmin: boolean;
+}
+
+const userSchema = new Schema<UserDocument>({
+  name: { type: String },
+  email: { type: String, required: true, unique: true, lowercase: true },
+  password: { type: String, required: true },
+  isAdmin: { type: Boolean, default: false }
 });
- 
-const User = model('User', userSchema);
+
+const User = model<UserDocument>('User', userSchema);
 export default User;

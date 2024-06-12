@@ -1,46 +1,57 @@
-import { Request, Response} from 'express';
+import { Request, Response } from 'express';
 import Plan from '../models/Plan';
+import Joi from 'joi';
 
+const planSchema = Joi.object({
+  name: Joi.string().optional(),
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+  confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
+    'any.only': 'Passwords do not match'
+  }),
+  isAdmin: Joi.boolean().optional()
+})
 
 export const createPlan = async (req: Request, res: Response) => {
-  const { name, features, price, duration } = req.body;
-  
+  const { error } = planSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+
   try {
-    const plan = new Plan({ name, features, price, duration });
+    const plan = new Plan(req.body);
     await plan.save();
     res.status(201).json(plan);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create plan' });
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
-
 export const updatePlan = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { name, features, price, duration } = req.body;
-  
+  const { error } = planSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+
   try {
-    const plan = await Plan.findByIdAndUpdate(id, { name, features, price, duration }, { new: true });
+    const plan = await Plan.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!plan) {
       return res.status(404).json({ error: 'Plan not found' });
     }
     res.status(200).json(plan);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update plan' });
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
-
 export const deletePlan = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  
   try {
-    const plan = await Plan.findByIdAndDelete(id);
+    const plan = await Plan.findByIdAndDelete(req.params.id);
     if (!plan) {
       return res.status(404).json({ error: 'Plan not found' });
     }
     res.status(200).json({ message: 'Plan deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to delete plan' });
+    res.status(500).json({ error: 'Server error' });
   }
 };
