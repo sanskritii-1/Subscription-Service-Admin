@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import Plan from '../models/Plan';
 import Joi from 'joi';
 
-const planSchema = Joi.object({
+const userSchema = Joi.object({
   name: Joi.string().optional(),
   email: Joi.string().email().required(),
   password: Joi.string().required(),
@@ -11,6 +11,13 @@ const planSchema = Joi.object({
   }),
   isAdmin: Joi.boolean().optional()
 })
+
+const planSchema = Joi.object({
+  name: Joi.string().required(),
+  features: Joi.string().required(),
+  price: Joi.number().required(),
+  duration: Joi.number().required(),
+});
 
 export const createPlan = async (req: Request, res: Response) => {
   const { error } = planSchema.validate(req.body);
@@ -51,6 +58,15 @@ export const deletePlan = async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Plan not found' });
     }
     res.status(200).json({ message: 'Plan deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+export const getPlans = async (req: Request, res: Response) => {
+  try {
+    const plans = await Plan.find();
+    res.status(200).json(plans);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }

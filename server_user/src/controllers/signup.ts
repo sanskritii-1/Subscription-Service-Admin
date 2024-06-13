@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import User from '../models/User';
+import User from '../models/user';
 import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
 
@@ -29,7 +29,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         });
 
         const tokenData = {
-            userId: newUser._id.toString(),
+            userId: newUser.id.toString(),
         };
 
         const token: string = jwt.sign(tokenData, process.env.JWT_SECRET_KEY!, { expiresIn: '1d' });
