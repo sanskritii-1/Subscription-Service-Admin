@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import Plan from '../models/Plan';
 import Joi from 'joi';
 
-const userSchema = Joi.object({
+/* const userSchema = Joi.object({
   name: Joi.string().optional(),
   email: Joi.string().email().required(),
   password: Joi.string().required(),
@@ -10,7 +10,7 @@ const userSchema = Joi.object({
     'any.only': 'Passwords do not match'
   }),
   isAdmin: Joi.boolean().optional()
-})
+}) */
 
 const planSchema = Joi.object({
   name: Joi.string().required(),
@@ -63,9 +63,11 @@ export const deletePlan = async (req: Request, res: Response) => {
   }
 };
 
+
 export const getPlans = async (req: Request, res: Response) => {
   try {
     const plans = await Plan.find();
+    if(plans.length == 0) return res.status(404).json({error: "No subscription plans found"});
     res.status(200).json(plans);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });

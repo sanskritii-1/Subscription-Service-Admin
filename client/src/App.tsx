@@ -1,21 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
-import { Outlet } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import AdminPanelPage from './pages/AdminPanelPage';
+import Home from './pages/Home';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    children: [
+      { path: '', element: <Home /> },
+      { path: 'AdminPanel', element: <AdminPanelPage /> },
+    ],
+  },
+]);
 
 function App() {
   return (
-    <>
-    <Header/>
-    
-    <main>
-      <Outlet/>
-    </main>
-
-    <Footer/>
-    </>
+    <RouterProvider router={router} />
   );
 }
 
