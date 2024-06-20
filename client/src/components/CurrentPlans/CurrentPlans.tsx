@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { sendData } from '../helper/utils';
-import classes from './PaymentInfo.module.css';
+import classes from './currentPlans.module.css';
 
 interface Payment {
   id: string;

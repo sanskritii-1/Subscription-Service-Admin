@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Plan from '../models/plan';
+import Plan from '../models/Plan';
 import Joi from 'joi';
 
 /* const userSchema = Joi.object({

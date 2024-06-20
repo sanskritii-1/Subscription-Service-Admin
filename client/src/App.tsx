@@ -1,16 +1,15 @@
 import React from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
-import AdminPanelPage from './pages/PaymentInfoPage';
+import CurrentPlansPage from './pages/currentPlansPage';
 import Home from './pages/Home';
-import PaymentInfoPage from './pages/PaymentInfoPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
     children: [
       { path: '', element: <Home /> },
-      { path: 'PaymentInfo' ,element: <PaymentInfoPage/>},
+      { path: 'CurrentPlansOfUsers' ,element: <CurrentPlansPage/>},
     ],
   },
 ]);

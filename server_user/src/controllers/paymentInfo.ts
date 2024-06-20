@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import User, { IUser } from '../models/user';
-import Plan, { IPlan } from '../models/plan';
+import Plan, { IPlan } from '../models/Plan';
 import Subscription, { ISubscription } from '../models/subscription';
 
 export const getPaymentHistory = async (req: Request, res: Response) => {

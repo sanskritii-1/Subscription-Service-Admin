@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { IUser } from './user';
-import { IPlan } from './plan';
+import { IPlan } from './Plan';
 
 export interface ISubscription extends Document {
     userId: mongoose.Types.ObjectId | IUser;
