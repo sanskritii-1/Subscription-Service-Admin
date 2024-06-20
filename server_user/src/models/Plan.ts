@@ -1,15 +1,40 @@
-import { Schema, model } from 'mongoose';
+import mongoose,{Document} from "mongoose";
 
-const planSchema = new Schema({
-  name: { type: String, required: true },
-  features: { type: String, required: true },
-  resources: { type: Number, required: true, },
-  price: { type: Number, required: true },
-  duration: { type: Number, required: true },
-},{
-  timestamps: true,
+export interface IPlan extends Document{
+    name: string,
+    features: string
+    resources: number,
+    price: number,
+    duration: number,
 }
-);
 
-const Plan = model('Plan', planSchema);
+const planSchema = new mongoose.Schema<IPlan>({
+    name:{
+        type:String,
+        required: true,
+        default:"free",
+        unique: true,
+    },
+    resources: {
+        type: Number,
+       // required: true,
+    },
+    price: {
+        type: Number,
+       // required: true,
+    },
+    duration: {
+        type: Number,
+        required: true,
+    },
+    features: {
+        type: String,
+        // required: true,
+    },
+},{
+    timestamps: true,
+})
+
+const Plan = mongoose.model<IPlan>('Plan', planSchema)
+
 export default Plan;
