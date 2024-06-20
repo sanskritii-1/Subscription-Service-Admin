@@ -16,7 +16,7 @@ export default function EditForm() {
       try {
         const resData = await sendData(
           "GET",
-          `manage-subscription:${id}`,
+          `manage-subscription/:${id}`,
           true
         );
         setName(resData.name);
@@ -42,7 +42,7 @@ export default function EditForm() {
       };
       const response = await sendData(
         "PUT",
-        `manage-subscription${id}`,
+        `manage-subscription/:${id}`,
         true,
         data
       );
@@ -55,30 +55,35 @@ export default function EditForm() {
 
   return (
     <div>
+      <h1 className={classes.h1}>Edit the plan</h1>
       <form onSubmit={editPlanHandler} className={classes.form}>
         <label>Name of Plan:</label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          required
         />
         <label>Number of resources:</label>
         <input
           type="text"
           value={features}
           onChange={(e) => setFeatures(e.target.value)}
+          required
         />
         <label>Price of Plan:</label>
         <input
           type="number"
           value={price}
           onChange={(e) => setPrice(e.target.valueAsNumber)}
+          required
         />
         <label>Duration:</label>
         <input
           type="number"
           value={duration}
           onChange={(e) => setDuration(e.target.valueAsNumber)}
+          required
         />
         <button>Edit Plan</button>
       </form>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sendData } from "../helper/utils";
-import classes from "./create.module.css";
+import classes from "./Create.module.css";
 
 export default function CreateForm() {
   const [name, setName] = useState<string>("");
@@ -34,30 +34,35 @@ export default function CreateForm() {
 
   return (
     <div>
+      <h1 className={classes.h1}>Create a new Plan</h1>
       <form onSubmit={createPlanHandler} className={classes.form}>
         <label>Name of Plan:</label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          required
         />
         <label>Number of resources:</label>
         <input
           type="text"
           value={features}
           onChange={(e) => setfeatures(e.target.value)}
+          required
         />
         <label>Price of Plan:</label>
         <input
           type="number"
           value={price}
           onChange={(e) => setPrice(e.target.valueAsNumber)}
+          required
         />
         <label>Duration:</label>
         <input
           type="number"
           value={duration}
           onChange={(e) => setDuration(e.target.valueAsNumber)}
+          required
         />
         <button>Create Plan</button>
       </form>

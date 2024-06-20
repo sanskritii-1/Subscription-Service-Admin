@@ -1,0 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap");
+
+.deleteButton {
+  font: inherit;
+  background-color: #972caa;
+  border: 1px solid #9c27b0;
+  color: #ffffff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.container {
+  font-family: "Mukta", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.newPlan {
+  text-decoration: none;
+  text-align: center;
+  background-color: #838383;
+  margin: 0vh 30vw;
+  font-size: 2rem;
+  padding: 2vh 10vw;
+  color: white;
+  border-radius: 2rem;
+}
+
+.h2 {
+  text-align: center;
+  margin: 5vh auto;
+}
+
+.cards {
+  text-align: center;
+  margin: auto 10vw;
+}
+
+.card {
+  box-shadow: 2px 2px 12px rgb(57, 57, 57);
+  background-color: #bebebe;
+  margin: 3vh auto;
+  padding: 2vh 0vh;
+}
+
+.link{
+    text-decoration: none;
+    color: black;
+    padding: 0vh 2vw 0vh 0vw;
+}

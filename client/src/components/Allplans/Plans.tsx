@@ -34,23 +34,23 @@ export default function Plans() {
 
   return (
     <div className={classes.container}>
-      <Link to="/create">+ Create New Plan</Link>
-      <h2>Available Subscriptions :</h2>
+      <Link to="/create" className={classes.newPlan}>+ Create New Plan</Link>
+      <h2 className={classes.h2}>Available Subscriptions :</h2>
       <div className={classes.cards}>
         {subscriptions.map((subscription) => (
           <div key={subscription._id} className={classes.card}>
             <div className={classes.header}>
               <h3>{subscription.name}</h3>
-              <p className={classes.price}>${subscription.price} USD</p>
+              <p className={classes.price}>Price of Plan: ${subscription.price} USD</p>
             </div>
-            <div className="card-body">{subscription.duration} months</div>
+            <div className="card-body">Duration of plan: {subscription.duration} months</div>
             <div>
               {subscription.resources === -1
                 ? "Unlimited Resource Access"
                 : `${subscription.resources} Resource Access`}
             </div>
-            <Link to={`/edit:${subscription._id}`}>Edit</Link>
-            <button onClick={()=>deleteHandler(subscription._id)}>Delete Plan</button>
+            <Link to={`/edit/:${subscription._id}`} className={classes.link}>Edit</Link>
+            <button onClick={()=>deleteHandler(subscription._id)} className={classes.deleteButton}>Delete Plan</button>
           </div>
         ))}
       </div>
