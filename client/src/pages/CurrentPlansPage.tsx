@@ -1,5 +1,5 @@
 import React from 'react'
-import CurrentPlans from '../components/CurrentPlans/currentPlans'
+import CurrentPlans from '../components/CurrentPlans/CurrentPlans'
 
 const currentPlansPage: React.FC = () => {
   return (
