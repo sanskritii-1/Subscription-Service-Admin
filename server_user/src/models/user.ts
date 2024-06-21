@@ -6,7 +6,7 @@ export interface IUser extends Document {
   password: string;
 }
 
-const userSchema: Schema<IUser> = new Schema({
+const userSchema = new Schema<IUser>({
   name: {
     type: String,
     trim: true,

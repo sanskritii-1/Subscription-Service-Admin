@@ -9,6 +9,6 @@ router.post('/manage-subscription', createPlan);
 router.put('/manage-subscription/:id',  updatePlan);
 router.delete('/manage-subscription/:id',  deletePlan);
 router.get('/manage-subscription', getPlans);
-router.get('/get-payment-info', getPaymentHistory);
+router.get('/get-payment-info',getPaymentHistory);
 
 export default router;
