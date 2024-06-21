@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { sendData } from "../helper/utils";
+import { useSendData } from "../helper/utils";
 import { Link, useNavigate } from "react-router-dom";
 import classes from "./Plans.module.css";
 
 export default function Plans() {
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
   const navigate = useNavigate();
+  const sendData = useSendData();
+  
   useEffect(() => {
     const fetchSubscriptions = async () => {
       try {

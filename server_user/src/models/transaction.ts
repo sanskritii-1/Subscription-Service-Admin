@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { IUser } from './user';
-import { IPlan } from './Plan';
+import { IPlan } from './plan';
 
 export interface ISubscription extends Document {
     userId: mongoose.Types.ObjectId | IUser;
@@ -16,5 +16,5 @@ const subscriptionSchema = new Schema<ISubscription>({
     endDate: { type: Date, required: true },
 }, { timestamps: true });
 
-const Subscription = mongoose.model<ISubscription>('Subscription', subscriptionSchema);
+const Subscription = mongoose.model<ISubscription>('Transaction', subscriptionSchema);
 export default Subscription;

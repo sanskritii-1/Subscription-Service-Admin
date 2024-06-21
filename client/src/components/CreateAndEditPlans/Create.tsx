@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { sendData } from "../helper/utils";
+import { useSendData } from "../helper/utils";
 import classes from "./Create.module.css";
 
 export default function CreateForm() {
@@ -8,7 +8,8 @@ export default function CreateForm() {
   const [features, setfeatures] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
-
+  const sendData = useSendData();
+  
   const navigate = useNavigate();
   const createPlanHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

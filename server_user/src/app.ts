@@ -11,12 +11,12 @@ const app:Express = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/admin", adminRouter);
 
 connectDB();
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello, TypeScript + Node.js + Express!');
 });
-app.use("/api", adminRouter);
-
+// app.use("/api", userRouter, subscriptionrouter);
 export default app;

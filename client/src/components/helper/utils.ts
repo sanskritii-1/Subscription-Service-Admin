@@ -1,38 +1,47 @@
-export async function sendData(
-  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
-  path: string,
-  authBool: boolean,
-  payload?: object,
-) {
-  
-  try {
-    let headers:HeadersInit={
-      "Content-Type": "application/json",
-    }
-    if(authBool){
-      const token  = localStorage.getItem('token');
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-    
-    const response = await fetch(`http://localhost:5001/api/${path}`, {
-      method: method,
-      headers: headers,
-      body: payload ? JSON.stringify(payload) : undefined,
-    });
+import { useNavigate } from "react-router-dom";
 
-    console.log('response received util: ', response)
-    const data = await response.json();
-    console.log('data received util: ', data)
+export function useSendData() {
+  const navigate = useNavigate();
+  async function sendData(
+    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+    path: string,
+    authBool: boolean,
+    payload?: object,
+  ) {
 
-    if (!response.ok) {
-      throw new Error(data.error || 'An error occurred');
+    try {
+      const token = localStorage.getItem('token');
+      let headers: HeadersInit = {
+        "Content-Type": "application/json",
+      }
+      if (token && authBool) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const response = await fetch(`http://localhost:5000/admin/${path}`, {
+        method: method,
+        headers: headers,
+        body: payload ? JSON.stringify(payload) : undefined,
+      });
+
+      console.log('response received util: ', response)
+      const data = await response.json();
+      console.log('data received util: ', data)
+      if (data.code === 401) {
+        console.log('in 401 in util')
+        return navigate('/login');
+      }
+      if (!response.ok) {
+        throw new Error(data.error || 'An error occurred');
+      }
+
+      return data;
+
     }
-
-    return data;
-    
-  } 
-  catch (err) {
-    console.log(err);
-    throw err;
+    catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
+  return sendData;
 }

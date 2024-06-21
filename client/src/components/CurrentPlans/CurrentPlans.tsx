@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { sendData } from '../helper/utils';
+import { useSendData } from '../helper/utils';
 import classes from './Currentplans.module.css';
 
 interface Payment {
@@ -16,21 +16,14 @@ const PaymentInfo: React.FC = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const sendData = useSendData();
 
   useEffect(() => {
     const fetchCurrentPlans = async () => {
       try {
-        // const response = await sendData('GET', 'get-payment-info', true);
+        const response = await sendData('GET', 'get-payment-info', false);
         // if (response.status === 500) {
-          setPayments([{
-            id: 'default',
-            userName: 'N/A',
-            userEmail: 'N/A',
-            planName: 'N/A',
-            startDate: new Date().toISOString(),
-            endDate: new Date().toISOString(),
-            status: 'N/A'
-          }]);
+          setPayments(response);
         // } else {
         //   setPayments(response);
         // }

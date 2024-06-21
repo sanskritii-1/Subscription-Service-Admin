@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { sendData } from "../helper/utils";
+import { useSendData } from "../helper/utils";
 import classes from "./Edit.module.css";
 
 export default function EditForm() {
@@ -10,6 +10,7 @@ export default function EditForm() {
   const [price, setPrice] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const navigate = useNavigate();
+  const sendData = useSendData();
 
   useEffect(() => {
     async function fetchListOfPayment() {

@@ -1,38 +1,41 @@
-import React from 'react';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import './App.css';
-import CurrentPlansPage from './pages/CurrentPlansPage';
-import Home from './pages/Home';
-import Create from "./components/CreateAndEditPlans/Create";
-import Edit from "./components/CreateAndEditPlans/Edit";
-import SubscriptionPlans from "./components/Allplans/Plans";
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    children: [
-      { path: '', element: <Home /> },
-      { path: 'Plans-User' ,element: <CurrentPlansPage/>},
-      {
-        path: "edit/:id",
-        element: <Edit />,
-      },
-      {
-        path: "create",
-        element: <Create />,
-      },
-      {
-        path: "subscription-plans",
-        element: <SubscriptionPlans />,
-      },
-    ],
-  },
-]);
+import React from "react";
+import "./App.css";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Create from "./pages/Create";
+import CurrentPlansPage from "./pages/CurrentPlansPage";
+import Edit from "./pages/Edit";
+import HomePage from "./pages/Home";
+import SubscriptionPlans from "./pages/SubscriptionPlans";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
-  return (
-    <RouterProvider router={router} />
-  );
+  const routers = createBrowserRouter([
+    {
+      path: "/",
+      element: <HomePage />,
+    },
+    {
+      path: "/login",
+      element: <LoginPage />,
+    },
+    {
+      path: "/all-plans",
+      element: <SubscriptionPlans />,
+    },
+    {
+      path: "/current-plan-details",
+      element: <CurrentPlansPage />,
+    },
+    {
+      path: "edit/:id",
+      element: <Edit />,
+    },
+    {
+      path: "create",
+      element: <Create />,
+    },
+  ]);
+  return <RouterProvider router={routers} />;
 }
 
 export default App;
