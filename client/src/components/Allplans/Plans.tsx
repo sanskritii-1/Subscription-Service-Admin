@@ -7,36 +7,36 @@ export default function Plans() {
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
   const navigate = useNavigate();
   const sendData = useSendData();
-  
-  useEffect(() => {
-    const fetchSubscriptions = async () => {
-      try {
-        const data = await sendData("GET", "manage-subscription", false);
-        if (Array.isArray(data)) {
-          setSubscriptions(data);
-        }
-      } catch (error) {
-        console.error("Error fetching subscriptions:", error);
+
+  const fetchSubscriptions = async () => {
+    try {
+      const data = await sendData("GET", "manage-subscription", false);
+      if (Array.isArray(data)) {
+        setSubscriptions(data);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching subscriptions:", error);
+    }
+  };
+  useEffect(() => {
 
     fetchSubscriptions();
   }, []);
 
-  const deleteHandler= async (id:string)=>{
+  const deleteHandler = async (id: string) => {
     try {
-        const response = await sendData('DELETE', 'manage-subscription', true, {planId:id});
-        navigate('/subscription-plans');
-      } 
-      catch (err) {
-        console.log(err);
-        window.alert(err);
-      }
+      const response = await sendData('DELETE', `manage-subscription/${id}`, true);
+      await fetchSubscriptions();
+    }
+    catch (err) {
+      console.log(err);
+      window.alert(err);
+    }
   }
 
   return (
     <div className={classes.container}>
-      <Link to="/create" className={classes.newPlan}>+ Create New Plan</Link>
+      <Link to="/create" className={classes.link}><div className={classes.newPlan}>+ Create New Plan</div></Link>
       <h2 className={classes.h2}>Available Subscriptions :</h2>
       <div className={classes.cards}>
         {subscriptions.map((subscription) => (
@@ -51,8 +51,8 @@ export default function Plans() {
                 ? "Unlimited Resource Access"
                 : `${subscription.resources} Resource Access`}
             </div>
-            <Link to={`/edit/:${subscription._id}`} className={classes.link}>Edit</Link>
-            <button onClick={()=>deleteHandler(subscription._id)} className={classes.deleteButton}>Delete Plan</button>
+            <Link to={`/edit/${subscription._id}`} className={classes.link}>Edit</Link>
+            <button onClick={() => deleteHandler(subscription._id)} className={classes.deleteButton}>Delete Plan</button>
           </div>
         ))}
       </div>

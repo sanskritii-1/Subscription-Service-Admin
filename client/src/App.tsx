@@ -19,7 +19,7 @@ function App() {
       element: <LoginPage />,
     },
     {
-      path: "/all-plans",
+      path: "/subscription-plans",
       element: <SubscriptionPlans />,
     },
     {

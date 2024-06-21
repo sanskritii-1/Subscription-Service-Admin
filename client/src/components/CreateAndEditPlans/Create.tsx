@@ -8,6 +8,7 @@ export default function CreateForm() {
   const [features, setfeatures] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
+  const [resources, setResources] = useState<number>(0);
   const sendData = useSendData();
   
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function CreateForm() {
         features: features,
         price: price,
         duration: duration,
+        resources: resources,
       };
       const response = await sendData(
         "POST",
@@ -46,9 +48,9 @@ export default function CreateForm() {
         />
         <label>Number of resources:</label>
         <input
-          type="text"
-          value={features}
-          onChange={(e) => setfeatures(e.target.value)}
+          type="number"
+          value={resources}
+          onChange={(e) => setResources(e.target.valueAsNumber)}
           required
         />
         <label>Price of Plan:</label>
@@ -64,6 +66,12 @@ export default function CreateForm() {
           value={duration}
           onChange={(e) => setDuration(e.target.valueAsNumber)}
           required
+        />
+        <label>Features(Optional):</label>
+        <input
+          type="text"
+          value={features}
+          onChange={(e) => setfeatures(e.target.value)}
         />
         <button>Create Plan</button>
       </form>

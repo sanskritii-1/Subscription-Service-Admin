@@ -6,9 +6,10 @@ import classes from "./Edit.module.css";
 export default function EditForm() {
   const { id } = useParams();
   const [name, setName] = useState<string>("");
-  const [features, setFeatures] = useState<string>("");
+  const [resources, setResources] = useState<number>(0);
   const [price, setPrice] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
+  const [features, setFeatures] = useState<string>("");
   const navigate = useNavigate();
   const sendData = useSendData();
 
@@ -17,13 +18,14 @@ export default function EditForm() {
       try {
         const resData = await sendData(
           "GET",
-          `manage-subscription/:${id}`,
+          `manage-subscription/${id}`,
           true
         );
         setName(resData.name);
         setDuration(resData.duration);
-        setFeatures(resData.features);
+        setResources(resData.resources);
         setPrice(resData.price);
+        setFeatures(resData.features);
       } catch (err) {
         console.log(err);
         window.alert(err);
@@ -37,13 +39,14 @@ export default function EditForm() {
     try {
       const data = {
         name: name,
-        features: features,
+        resources: resources,
         price: price,
         duration: duration,
+        features: features,
       };
       const response = await sendData(
         "PUT",
-        `manage-subscription/:${id}`,
+        `manage-subscription/${id}`,
         true,
         data
       );
@@ -67,9 +70,9 @@ export default function EditForm() {
         />
         <label>Number of resources:</label>
         <input
-          type="text"
-          value={features}
-          onChange={(e) => setFeatures(e.target.value)}
+          type="number"
+          value={resources}
+          onChange={(e) => setResources(e.target.valueAsNumber)}
           required
         />
         <label>Price of Plan:</label>
@@ -85,6 +88,12 @@ export default function EditForm() {
           value={duration}
           onChange={(e) => setDuration(e.target.valueAsNumber)}
           required
+        />
+        <label>Features(Optional):</label>
+        <input
+          type="text"
+          value={features}
+          onChange={(e) => setFeatures(e.target.value)}
         />
         <button>Edit Plan</button>
       </form>

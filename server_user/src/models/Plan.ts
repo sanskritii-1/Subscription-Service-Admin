@@ -17,11 +17,11 @@ const planSchema = new mongoose.Schema<IPlan>({
     },
     resources: {
         type: Number,
-       // required: true,
+       required: true,
     },
     price: {
         type: Number,
-       // required: true,
+       required: true,
     },
     duration: {
         type: Number,

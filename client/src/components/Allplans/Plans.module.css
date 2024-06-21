@@ -20,9 +20,11 @@
   text-decoration: none;
   text-align: center;
   background-color: #838383;
-  margin: 0vh 30vw;
+  width: 90vw;
+  height: 10vh;
+  margin: 1vh 5vw;
   font-size: 2rem;
-  padding: 2vh 10vw;
+  padding: 2vh 0vw 0vh 0vw;
   color: white;
   border-radius: 2rem;
 }
