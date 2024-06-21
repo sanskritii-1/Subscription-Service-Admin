@@ -10,7 +10,7 @@ export default function Plans() {
 
   const fetchSubscriptions = async () => {
     try {
-      const data = await sendData("GET", "manage-subscription", false);
+      const data = await sendData("GET", "manage-subscription", true);
       console.log(data);
       if (Array.isArray(data)) {
         setSubscriptions(data);

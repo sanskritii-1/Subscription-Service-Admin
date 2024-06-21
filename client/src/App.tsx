@@ -10,12 +10,12 @@ import LoginPage from "./pages/LoginPage";
 
 function App() {
   const routers = createBrowserRouter([
+    // {
+    //   path: "/",
+    //   element: <HomePage/>,
+    // },
     {
       path: "/",
-      element: <LoginPage/>,
-    },
-    {
-      path: "/login",
       element: <LoginPage/>,
     },
     {

@@ -18,6 +18,10 @@ export const adminMiddleware = (req: CustomRequest, res: Response, next: NextFun
     const accessSecret = getAcessTokenSecret();
     const payloadData = jwt.verify(token, accessSecret) as JwtPayload;
 
+    if(payloadData.email!=='admin@gmail.com'){
+      next({status:401, message: 'Unathorised access'})
+    }
+
     req.id = payloadData;
     console.log('payloadData: ', payloadData);
 

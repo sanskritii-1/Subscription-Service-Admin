@@ -31,7 +31,7 @@ export function useSendData() {
         if (contentType && contentType.includes('application/json')) {
           const data = await response.json();
           if (data.code === 401) {
-            return navigate('/login');
+            return navigate('/');
           }
           throw new Error(data.error || 'An error occurred');
         } else {
