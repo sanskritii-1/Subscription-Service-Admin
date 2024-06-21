@@ -8,6 +8,7 @@ interface Payment {
   userName: string;
   userEmail: string;
   planName: string;
+  startDate: string;
   status: string;
 }
 
@@ -49,6 +50,7 @@ const Info: React.FC = () => {
             <th><FaUser className="icon" />User Name</th>
             <th><FaEnvelope className="icon" />User Email</th>
             <th><FaCalendarAlt className="icon" />Plan Name</th>
+            <th><FaCalendarAlt className="icon" />Start Date</th>
             <th><FaRegClock className="icon" />Status</th>
           </tr>
         </thead>
@@ -59,6 +61,7 @@ const Info: React.FC = () => {
               <td>{payment.userName}</td>
               <td>{payment.userEmail}</td>
               <td>{payment.planName}</td>
+              <td>{new Date(payment.startDate).toLocaleDateString()}</td>
               <td>
                 {payment.status === 'active' ? (
                   <FaCheckCircle className="icon" style={{ color: 'green' }} />
