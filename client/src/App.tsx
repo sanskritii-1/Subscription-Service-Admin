@@ -2,20 +2,22 @@ import React from "react";
 import "./App.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Create from "./pages/Create";
-import CurrentPlansPage from "./pages/CurrentPlansPage";
 import Edit from "./pages/Edit";
 import HomePage from "./pages/Home";
 import SubscriptionPlans from "./pages/SubscriptionPlans";
 import LoginPage from "./pages/LoginPage";
+import InfoPage from './pages/InfoPage';
+import CurrentPlanPage from './pages/CurrentPlanPage';
+
 
 function App() {
   const routers = createBrowserRouter([
+    // {
+    //   path: "/",
+    //   element: <HomePage />,
+    // },
     {
       path: "/",
-      element: <HomePage />,
-    },
-    {
-      path: "/login",
       element: <LoginPage />,
     },
     {
@@ -23,8 +25,12 @@ function App() {
       element: <SubscriptionPlans />,
     },
     {
-      path: "/current-plan-details",
-      element: <CurrentPlansPage />,
+      path: "/current-plans",
+      element: <CurrentPlanPage />,
+    },
+    { 
+      path: 'PaymentInfo' ,
+      element: <InfoPage/>
     },
     {
       path: "edit/:id",
