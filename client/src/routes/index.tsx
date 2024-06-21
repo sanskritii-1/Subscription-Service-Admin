@@ -6,6 +6,7 @@ import Home from "../pages/Home";
 import Create from "../pages/Create";
 import Edit from "../pages/Edit";
 import SubscriptionPlans from "../pages/SubscriptionPlans";
+import Login from "../components/Authentication/Login/Login";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Home />,
+        element: <Login/>,
       },
       {
         path: "edit/:id",

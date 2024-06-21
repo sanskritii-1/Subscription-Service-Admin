@@ -22,11 +22,11 @@ const PaymentInfo: React.FC = () => {
     const fetchCurrentPlans = async () => {
       try {
         const response = await sendData('GET', 'get-payment-info', false);
-        // if (response.status === 500) {
+         if (response.status === 500) {
           setPayments(response);
-        // } else {
-        //   setPayments(response);
-        // }
+        } else {
+          setPayments(response);
+        }
       } catch (error) {
         setError('Error fetching current plans');
       } finally {
