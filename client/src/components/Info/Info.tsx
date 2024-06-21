@@ -20,7 +20,7 @@ const Info: React.FC = () => {
   useEffect(() => {
     const fetchPaymentHistory = async () => {
       try {
-        const response = await sendData('GET', 'get-payment-info', false);
+        const response = await sendData('GET', 'get-payment-info', true);
         // if (response.status === 500) {
           setPayments(response);
         // } else {

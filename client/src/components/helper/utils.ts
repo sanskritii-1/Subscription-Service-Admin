@@ -2,18 +2,19 @@ import { useNavigate } from "react-router-dom";
 
 export function useSendData() {
   const navigate = useNavigate();
+
   async function sendData(
     method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     path: string,
     authBool: boolean,
     payload?: object,
   ) {
-
     try {
       const token = localStorage.getItem('token');
       let headers: HeadersInit = {
         "Content-Type": "application/json",
-      }
+      };
+
       if (token && authBool) {
         headers['Authorization'] = `Bearer ${token}`;
       }
@@ -24,24 +25,27 @@ export function useSendData() {
         body: payload ? JSON.stringify(payload) : undefined,
       });
 
-      console.log('response received util: ', response)
-      const data = await response.json();
-      console.log('data received util: ', data)
-      if (data.code === 401) {
-        console.log('in 401 in util')
-        return navigate('/login');
-      }
+      // Check if response is not OK
       if (!response.ok) {
-        throw new Error(data.error || 'An error occurred');
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const data = await response.json();
+          if (data.code === 401) {
+            return navigate('/');
+          }
+          throw new Error(data.error || 'An error occurred');
+        } else {
+          throw new Error('Server returned an invalid response');
+        }
       }
 
+      const data = await response.json();
       return data;
-
-    }
-    catch (err) {
-      console.log(err);
-      throw err;
+    } catch (err) {
+      console.error('Error in sendData:', err);
+      throw err; // Rethrow the error for the caller to handle
     }
   }
+
   return sendData;
 }

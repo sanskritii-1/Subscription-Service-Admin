@@ -17,19 +17,18 @@ const Login: React.FC = () => {
       const data = { email: email, password: password };
       const response = await sendData('POST', 'login', false, data);
 
-      if(response.token){
-        localStorage.setItem('token', response.token);
+      console.log(response);
+
+      if(response.accessToken){
+        localStorage.setItem('token', response.accessToken);
       }
       else{
         throw new Error('Authentication failed');
       }
-      navigate("/subscriptions");
+      navigate("/subscription-plans");
     } catch (err) {
       console.log(err);
     }
-    // if (response) {
-    //   invalidInput = <p>Invalid Email or Password!</p>;
-    // }
   };
 
   return (
@@ -52,7 +51,7 @@ const Login: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            minLength={8}
+            minLength={5}
           />
         </div>
         <div className={classes.flex}>
@@ -60,9 +59,6 @@ const Login: React.FC = () => {
             <button type="submit">Login</button>
           </div>
           <div>
-            <Link to="/register" className={classes.link}>
-              Don't have an account? Create one!
-            </Link>
           </div>
         </div>
       </form>

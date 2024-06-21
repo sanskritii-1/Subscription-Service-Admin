@@ -19,7 +19,7 @@ const CurrentPage: React.FC = () => {
   useEffect(() => {
     const fetchCurrentPlans = async () => {
       try {
-        const response = await sendData('GET', 'get-payment-info', false);
+        const response = await sendData('GET', 'get-payment-info', true);
         setPayments(response);
       } catch (error) {
         setError('Error fetching current plans');
