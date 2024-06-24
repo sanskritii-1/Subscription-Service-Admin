@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
 
 export function useSendData() {
   const navigate = useNavigate();
@@ -13,8 +14,7 @@ export function useSendData() {
       const token = localStorage.getItem('token');
       let headers: HeadersInit = {
         "Content-Type": "application/json",
-      };
-
+      }
       if (token && authBool) {
         headers['Authorization'] = `Bearer ${token}`;
       }
@@ -25,27 +25,30 @@ export function useSendData() {
         body: payload ? JSON.stringify(payload) : undefined,
       });
 
-      // Check if response is not OK
+      const data = await response.json();
+
+      console.log('data received util: ', data);
+
+      if(data.code===401){
+        toast.error('Unathorised Access')
+        return navigate('/login')
+      }
+      console.log(response.ok);
       if (!response.ok) {
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const data = await response.json();
-          if (data.code === 401) {
-            return navigate('/');
-          }
-          throw new Error(data.error || 'An error occurred');
-        } else {
-          throw new Error('Server returned an invalid response');
-        }
+        toast.error(data.error|| 'An error occurred');
+        throw new Error(data.error || 'An error occurred');
       }
 
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      console.error('Error in sendData:', err);
-      throw err; // Rethrow the error for the caller to handle
+      if (data.status === 'ok'&& data.result.message) {
+        toast.success(data.result.message || 'Operation successful');
+      }
+
+      return data.result;
+
+    } catch (err: any) { 
+      console.error(err); 
+      throw err; 
     }
   }
-
   return sendData;
 }

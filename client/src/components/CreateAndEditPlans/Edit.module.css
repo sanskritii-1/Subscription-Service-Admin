@@ -1,5 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap");
-
+.editButton {
+  font: inherit;
+  background-color:red;
+  border: 1px solid #9c27b0;
+  color: #ffffff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
 .form {
   padding: 1rem 5rem;
   width: 40vw;
@@ -58,3 +66,5 @@
   font-weight: 900;
   font-style: normal;
 }
+
+

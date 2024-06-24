@@ -22,11 +22,9 @@ const Info: React.FC = () => {
     const fetchPaymentHistory = async () => {
       try {
         const response = await sendData('GET', 'get-payment-info', true);
-        // if (response.status === 500) {
-          setPayments(response);
-        // } else {
-        //   setPayments(response);
-        // }
+          setPayments(response.paymentHistory);
+          console.log(response.paymentHistory);
+
       } catch (error) {
         setError('Error fetching payment history');
       } finally {
@@ -55,7 +53,7 @@ const Info: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {payments.map(payment => (
+          {payments&&payments.map(payment => (
             <tr key={payment.id}>
               <td>{payment.id}</td>
               <td>{payment.userName}</td>

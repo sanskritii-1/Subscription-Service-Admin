@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSendData } from "../helper/utils";
 import classes from "./Create.module.css";
+import toast from 'react-hot-toast';
 
 export default function CreateForm() {
   const [name, setName] = useState<string>("");
@@ -10,6 +11,7 @@ export default function CreateForm() {
   const [duration, setDuration] = useState<number>(0);
   const [resources, setResources] = useState<number>(0);
   const sendData = useSendData();
+
   
   const navigate = useNavigate();
   const createPlanHandler = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -22,16 +24,11 @@ export default function CreateForm() {
         duration: duration,
         resources: resources,
       };
-      const response = await sendData(
-        "POST",
-        "manage-subscription",
-        true,
-        data
-      );
+      const response = await sendData("POST","manage-subscription",true,data);
+      
       navigate("/subscription-plans");
     } catch (err) {
       console.log(err);
-      window.alert(err);
     }
   };
 

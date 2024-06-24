@@ -2,13 +2,12 @@ import { Request, Response } from 'express';
 import User, { IUser } from '../models/user';
 import Plan, { IPlan } from '../models/plan';
 import Subscription, { ISubscription } from '../models/transaction';
+import {success,error} from "../utils/response";
 
 export const getPaymentHistory = async (req: Request, res: Response) => {
   try {
     console.log("hii");
-    const subscriptions = await Subscription.find()
-      // .populate('userId', 'name email') 
-      // .populate('planId', 'name');   
+    const subscriptions = await Subscription.find()  
       
       console.log("hii2");
 
@@ -27,9 +26,10 @@ export const getPaymentHistory = async (req: Request, res: Response) => {
     })
   );
 
+    return res.status(200).json(success(200,{paymentHistory}));
     res.status(200).json(paymentHistory);
   } catch (error) {
     console.error('Error fetching payment history:', error);
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ error: 'Error fetching payment history'});
   }
 };

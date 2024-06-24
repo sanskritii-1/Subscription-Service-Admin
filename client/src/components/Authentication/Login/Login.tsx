@@ -15,7 +15,7 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       const data = { email: email, password: password };
-      const response = await sendData('POST', 'login', false, data);
+      const response = await sendData('POST', 'login', false, data)
 
       console.log(response);
 

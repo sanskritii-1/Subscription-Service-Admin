@@ -29,7 +29,7 @@ function App() {
       element: <CurrentPlanPage />,
     },
     { 
-      path: 'PaymentInfo' ,
+      path: '/PaymentInfo' ,
       element: <InfoPage/>
     },
     {

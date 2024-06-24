@@ -2,7 +2,7 @@
 
 .deleteButton {
   font: inherit;
-  background-color: #972caa;
+  background-color:red;
   border: 1px solid #9c27b0;
   color: #ffffff;
   padding: 0.5rem 1.5rem;
@@ -20,9 +20,9 @@
   text-decoration: none;
   text-align: center;
   background-color: #838383;
-  width: 90vw;
+  width: 70vw;
   height: 10vh;
-  margin: 1vh 5vw;
+  margin: 1vh 12vw;
   font-size: 2rem;
   padding: 2vh 0vw 0vh 0vw;
   color: white;

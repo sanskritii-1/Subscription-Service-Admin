@@ -20,7 +20,7 @@ const CurrentPage: React.FC = () => {
     const fetchCurrentPlans = async () => {
       try {
         const response = await sendData('GET', 'get-payment-info', true);
-        setPayments(response);
+        setPayments(response.paymentHistory);
       } catch (error) {
         setError('Error fetching current plans');
       } finally {
@@ -61,7 +61,7 @@ const CurrentPage: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {currentPlansForUniqueEmails.map((userData, index) => (
+          {currentPlansForUniqueEmails&&currentPlansForUniqueEmails.map((userData, index) => (
             <tr key={index}>
               <td>{index+1}</td>
               <td>{userData.userName}</td>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSendData } from "../helper/utils";
 import classes from "./Edit.module.css";
+import toast from 'react-hot-toast';
 
 export default function EditForm() {
   const { id } = useParams();
@@ -16,11 +17,15 @@ export default function EditForm() {
   useEffect(() => {
     async function fetchListOfPayment() {
       try {
-        const resData = await sendData(
+        const res = await sendData(
           "GET",
           `manage-subscription/${id}`,
           true
         );
+        console.log("hii");
+        const resData=res.plan;
+        console.log(res);
+
         setName(resData.name);
         setDuration(resData.duration);
         setResources(resData.resources);
@@ -28,7 +33,6 @@ export default function EditForm() {
         setFeatures(resData.features);
       } catch (err) {
         console.log(err);
-        window.alert(err);
       }
     }
     fetchListOfPayment();
@@ -53,7 +57,6 @@ export default function EditForm() {
       navigate("/subscription-plans");
     } catch (err) {
       console.log(err);
-      window.alert(err);
     }
   };
 
@@ -95,7 +98,8 @@ export default function EditForm() {
           value={features}
           onChange={(e) => setFeatures(e.target.value)}
         />
-        <button>Edit Plan</button>
+        
+        <button className={classes.editButton}>Edit Plan</button>
       </form>
     </div>
   );

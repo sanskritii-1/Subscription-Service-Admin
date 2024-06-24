@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSendData } from "../helper/utils";
 import { Link, useNavigate } from "react-router-dom";
 import classes from "./Plans.module.css";
+import toast from 'react-hot-toast';
 
 export default function Plans() {
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
@@ -10,7 +11,8 @@ export default function Plans() {
 
   const fetchSubscriptions = async () => {
     try {
-      const data = await sendData("GET", "manage-subscription", true);
+      const res = await sendData("GET", "manage-subscription", true);
+      const data=res.plans;
       console.log(data);
       if (Array.isArray(data)) {
         setSubscriptions(data);
@@ -26,12 +28,13 @@ export default function Plans() {
 
   const deleteHandler = async (id: string) => {
     try {
-      const response = await sendData('DELETE', `manage-subscription/${id}`, true);
+      const res = await sendData('DELETE', `manage-subscription/${id}`, true);
+      const data=res.plans;
+      console.log(data);
       await fetchSubscriptions();
     }
     catch (err) {
       console.log(err);
-      window.alert(err);
     }
   }
 
