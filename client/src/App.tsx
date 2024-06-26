@@ -8,6 +8,9 @@ import SubscriptionPlans from "./pages/SubscriptionPlans";
 import LoginPage from "./pages/LoginPage";
 import InfoPage from './pages/InfoPage';
 import CurrentPlanPage from './pages/CurrentPlanPage';
+import PlanAnalytics from "./components/PlanAnalytics/PlanAnalytics";
+import UserAnalytics from "./components/UserAnalytics/UserAnalytics";
+
 
 
 function App() {
@@ -39,6 +42,14 @@ function App() {
     {
       path: "create",
       element: <Create />,
+    },
+    {
+      path: "/plan-analytics",
+      element: <PlanAnalytics />,
+    },
+    {
+      path: "/user-analytics",
+      element: <UserAnalytics />,
     },
   ]);
   return <RouterProvider router={routers} />;

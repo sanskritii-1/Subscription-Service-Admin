@@ -23,7 +23,7 @@ export const adminMiddleware = (req: CustomRequest, res: Response, next: NextFun
     }
 
     req.id = payloadData;
-    console.log('payloadData: ', payloadData);
+    //console.log('payloadData: ', payloadData);
 
     next();
   } catch (err) {

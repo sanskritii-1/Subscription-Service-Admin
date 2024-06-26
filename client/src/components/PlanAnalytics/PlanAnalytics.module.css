@@ -1,0 +1,30 @@
+.div {
+    border: 1px solid #0d0101;
+    text-align: center;
+    margin: 5vh 10vw;
+  }
+  
+  .table th {
+    border: 1px solid #0d0101;
+    padding: 10px;
+  }
+  
+  .table td {
+    border-left: 1px solid #0d0101;
+  }
+  .table th {
+    background-color: #937979;
+  }
+  .table tbody tr:nth-child(even) {
+    background-color: #dabcbc;
+  }
+  
+  .box{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap:200px;
+  }
+
+  
