@@ -1,26 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { useSendData } from "../helper/utils";
-import classes from './UserAnalytics.module.css';
+import classes from "./UserAnalytics.module.css";
 
 export default function UserAnalytics() {
+  const [search, setSearch] = useState("");
   const [userAnalytics, setUserAnalytics] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const sendData = useSendData();
 
-  useEffect(() => {
-    async function fetchUserAnalytics() {
-      try {
-        const response = await sendData("GET", `user-analytics?page=${page}&limit=${limit}`, true);
-        setUserAnalytics(response.userDetails);
-        setTotalPages(response.pagination.totalPages);
-      } catch (err) {
-        console.log(err);
-      }
+  async function fetchUserAnalytics() {
+    try {
+      const response = await sendData(
+        "GET",
+        `user-analytics?page=${page}&limit=${limit}&keyword=${search}`,
+        true
+      );
+      setUserAnalytics(response.userDetails);
+      setTotalPages(response.pagination.totalPages);
+    } catch (err) {
+      console.log(err);
     }
+  }
+
+  useEffect(() => {
     fetchUserAnalytics();
-  }, [page, limit]);
+  }, [page, limit, search]);
 
   const handleNextPage = () => {
     if (page < totalPages) {
@@ -34,33 +40,47 @@ export default function UserAnalytics() {
     }
   };
 
+  const searchHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+    fetchUserAnalytics();
+  };
+
   return (
     <div>
-    <div className={classes.div}>
-      <table className={classes.table}>
-        <thead>
-          <tr>
-            <th>User Name</th>
-            <th>User E-mail</th>
-            <th>Subscription</th>
-            <th>Number of resources Left</th>
-            <th>Resources Accessed</th>
-            <th>Resources Left</th>
-          </tr>
-        </thead>
-        <tbody>
-          {userAnalytics.map((user) => (
-            <tr key={user.userId}>
-              <td>{user.userName}</td>
-              <td>{user.userEmail}</td>
-              <td>{user.planName}</td>
-              <td>{user.leftResources}</td>
-              <td>{user.accessedResources}</td>
-              <td>{user.leftResources}</td>
+      <form onSubmit={searchHandler} className={classes.form}>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <button type="submit">Search</button>
+      </form>
+      <div className={classes.div}>
+        <table className={classes.table}>
+          <thead>
+            <tr>
+              <th>User Name</th>
+              <th>User E-mail</th>
+              <th>Subscription</th>
+              <th>Number of resources Left</th>
+              <th>Resources Accessed</th>
+              <th>Resources Left</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {userAnalytics.map((user) => (
+              <tr key={user.userId}>
+                <td>{user.userName}</td>
+                <td>{user.userEmail}</td>
+                <td>{user.planName}</td>
+                <td>{user.leftResources}</td>
+                <td>{user.accessedResources}</td>
+                <td>{user.leftResources}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
       <div className={classes.pagination}>
         <button onClick={handlePreviousPage} disabled={page === 1}>

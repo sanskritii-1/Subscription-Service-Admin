@@ -53,3 +53,42 @@
 .pagination span {
   margin: 0 10px;
 }
+
+.form{
+  display: flex;
+  justify-content: space-around;
+  margin: 0vh 10vw;
+}
+
+.form input {
+  display: block;
+  width: 50%;
+  font: inherit;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  background-color: #755e6070;
+  border: none;
+  border-bottom: 2px solid #494844;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.form button {
+  font: inherit;
+  background-color: #844242;
+  border: 1px solid #844242;
+  color: #ffffff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.form button:hover,
+.form button:active {
+  background-color: #703d3d;
+  border-color: #844242;
+}
