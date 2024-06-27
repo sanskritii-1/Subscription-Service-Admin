@@ -42,6 +42,7 @@ export default function UserAnalytics() {
 
   const searchHandler = (e: React.FormEvent) => {
     e.preventDefault();
+    setPage(1);
     fetchUserAnalytics();
   };
 
