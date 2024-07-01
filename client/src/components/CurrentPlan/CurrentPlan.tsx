@@ -8,6 +8,7 @@ interface Payment {
   userEmail: string;
   planName: string;
   endDate: string;
+  startDate: string;
 }
 
 const CurrentPage: React.FC = () => {
@@ -20,7 +21,7 @@ const CurrentPage: React.FC = () => {
     const fetchCurrentPlans = async () => {
       try {
         const response = await sendData('GET', 'get-payment-info', true);
-        setPayments(response.paymentHistory);
+        setPayments(response);
       } catch (error) {
         setError('Error fetching current plans');
       } finally {
@@ -35,17 +36,30 @@ const CurrentPage: React.FC = () => {
   if (error) return <div>{error}</div>;
 
   // Function to filter current plans for each unique email ID
+  // const getCurrentPlansForUniqueEmails = () => {
+  //   const currentDate = new Date();
+  //   const uniqueEmails = Array.from(new Set(payments.map(payment => payment.userEmail)));
+  //   const currentPlans = uniqueEmails.map(email => {
+  //     const user = payments.find(payment => payment.userEmail === email);
+  //     const plansForEmail = payments.filter(payment => payment.userEmail === email && new Date(payment.endDate) >= currentDate);
+  //     return { userName: user?.userName, userEmail: email, currentPlans: plansForEmail.map(plan => plan.planName) };
+  //   });
+  //   return currentPlans;
+  // };
   const getCurrentPlansForUniqueEmails = () => {
     const currentDate = new Date();
     const uniqueEmails = Array.from(new Set(payments.map(payment => payment.userEmail)));
     const currentPlans = uniqueEmails.map(email => {
       const user = payments.find(payment => payment.userEmail === email);
       const plansForEmail = payments.filter(payment => payment.userEmail === email && new Date(payment.endDate) >= currentDate);
-      return { userName: user?.userName, userEmail: email, currentPlans: plansForEmail.map(plan => plan.planName) };
+
+      // Sort plans by startDate and take the latest one
+      const latestPlan = plansForEmail.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())[0];
+      
+      return { userName: user?.userName, userEmail: email, currentPlan: latestPlan?.planName || 'No current plans' };
     });
     return currentPlans;
   };
-
   const currentPlansForUniqueEmails = getCurrentPlansForUniqueEmails();
 
   return (
@@ -61,12 +75,13 @@ const CurrentPage: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {currentPlansForUniqueEmails&&currentPlansForUniqueEmails.map((userData, index) => (
+          {currentPlansForUniqueEmails.map((userData, index) => (
             <tr key={index}>
               <td>{index+1}</td>
               <td>{userData.userName}</td>
               <td>{userData.userEmail}</td>
-              <td>{userData.currentPlans.length > 0 ? userData.currentPlans.join(', ') : 'No current plans'}</td>
+              <td>{userData.currentPlan}</td>
+              {/* <td>{userData.currentPlans.length > 0 ? userData.currentPlans.join(', ') : 'No current plans'}</td> */}
             </tr>
           ))}
         </tbody>
