@@ -22,6 +22,7 @@ export default function UserAnalytics() {
         true
       );
       setUserAnalytics(response.userDetails);
+      console.log("in user anly ui: ", response)
       setTotalPages(response.pagination.totalPages);
     } catch (err) {
       console.log(err);
@@ -68,9 +69,10 @@ export default function UserAnalytics() {
               <th>User Name</th>
               <th>User E-mail</th>
               <th>Subscription</th>
-              {/* <th>Number of resources Left</th> */}
-              <th>Resources Accessed</th>
-              {/* <th>Resources Left</th> */}
+              <th>Total Number of resources</th>
+              {/* <th>Resources Accessed</th> */}
+              <th>Resources Left</th>
+              <th>Used Date</th>
             </tr>
           </thead>
           <tbody>
@@ -79,14 +81,17 @@ export default function UserAnalytics() {
                 <td>{user.userName}</td>
                 <td>{user.userEmail}</td>
                 <td>{user.planName}</td>
-                {/* <td>{user.leftResources}</td> */}
+                <td>{user.totalResources.map((resource:IAccessResource, index:number)=>
+                  <p key={index}>{resource.title}: {resource.access}</p>
+                )}</td>
+                
                 {/* <td>{user.accessedResources.map((resource:IAccessResource) =>
                   `${resource.title}: ${resource.access}`
                 ).join(', ')}</td> */}
-                <td>{user.accessedResources.map((resource:IAccessResource) =>
-                  <p>{resource.title}: {resource.access}</p>
+                <td>{user.leftResources.map((resource:IAccessResource, index:number) =>
+                  <p key={index}>{resource.title}: {resource.access}</p>
                 )}</td>
-                {/* <td>{user.leftResources}</td> */}
+                <td>{user.updatedDate}</td>
               </tr>
             ))}
           </tbody>

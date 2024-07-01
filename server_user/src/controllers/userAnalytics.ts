@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import UserResource from '../models/userResource';
+import UserResource, { IUserResources } from '../models/userResource';
 import User, { IUser } from '../models/user';
 import Subscription from '../models/transaction';
 import Plan from '../models/plan';
 import { success, error } from '../utils/response';
 import mongoose from 'mongoose';
+import ResourceGrp from '../models/resourceGrp';
 
 export const getUserResourceDetails = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
@@ -41,15 +42,15 @@ export const getUserResourceDetails = async (req: Request, res: Response, next: 
             const user = await User.findById(userId, 'name email');
             const subscription = await Subscription.findOne({ userId }).sort({ startDate: -1 }).select('planId');
             const planId = subscription ? subscription.planId : null;
-            const plan = planId ? await Plan.findById(planId, 'name') : null;
+            const plan = planId ? await Plan.findById(planId) : null;
 
-            const accessedResources = await UserResource.aggregate([
+            const leftResources = await UserResource.aggregate([
                 { $match: { userId: userId } },
-                { $unwind: '$resourceAccess' },
+                { $unwind: '$leftResources' },
                 {
                     $lookup: {
                         from: 'resources',
-                        localField: 'resourceAccess.rId',
+                        localField: 'leftResources.rId',
                         foreignField: '_id',
                         as: 'resourceDetails'
                     }
@@ -58,18 +59,43 @@ export const getUserResourceDetails = async (req: Request, res: Response, next: 
                 {
                     $project: {
                         title: '$resourceDetails.title',
-                        access: '$resourceAccess.access'
+                        access: '$leftResources.access'
                     }
                 }
             ]);
+
+            const totalResources = await ResourceGrp.aggregate([
+                { $match: { _id: plan?.grpId } },
+                { $unwind: '$resources' },
+                {
+                    $lookup: {
+                        from: 'resources',
+                        localField: 'resources.rId',
+                        foreignField: '_id',
+                        as: 'resourceDetails'
+                    }
+                },
+                { $unwind: '$resourceDetails' },
+                {
+                    $project: {
+                        title: '$resourceDetails.title',
+                        access: '$resources.access'
+                    }
+                }
+            ]);
+
+            const updatedDate = (await UserResource.findOne<IUserResources>({userId}))?.updatedAt;
+            
 
             return {
                 userId: userId,
                 userName: user?.name,
                 userEmail: user?.email,
                 // leftResources: userResource.leftResources,
-                accessedResources,
+                totalResources,
+                leftResources,
                 planName: plan ? plan.name : 'No active plan',
+                updatedDate: updatedDate?.toLocaleDateString(),
             };
         }));
 

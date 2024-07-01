@@ -8,6 +8,8 @@ export interface IPlan extends Document {
     price: number,
     duration: number,
     grpId: mongoose.Types.ObjectId | IResourceGrp,
+    createdAt: Date,
+    updatedAt: Date,
 }
 
 const planSchema = new mongoose.Schema<IPlan>({

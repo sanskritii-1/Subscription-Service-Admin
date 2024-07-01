@@ -8,7 +8,9 @@ interface IResourceAccess {
 
 export interface IUserResources extends Document {
     userId: mongoose.Types.ObjectId | IUser,
-    resourceAccess: IResourceAccess[],
+    leftResources: IResourceAccess[],
+    createdAt: Date,
+    updatedAt: Date,
 }
 
 const userResourceSchema = new mongoose.Schema<IUserResources>({
@@ -17,7 +19,7 @@ const userResourceSchema = new mongoose.Schema<IUserResources>({
         ref: "User",
         required: true,
     },
-    resourceAccess: {
+    leftResources: {
         type: [{
             rId: {
                 type: mongoose.Types.ObjectId,

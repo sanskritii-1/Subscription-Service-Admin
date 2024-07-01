@@ -81,14 +81,25 @@ export const getPlans = async (req: Request, res: Response, next: NextFunction) 
     if(plans.length == 0) return res.status(404).json({error: "No subscription plans found"});
 
     const planData = await Promise.all(plans.map(async (plan)=>{
-      const resourceGrp = await ResourceGrp.findById<IResourceGrp>(plan.grpId);
-      if(!resourceGrp){
-        return next({status:400, message: "Resource Group not found"})
-      }
-
-      const resourceIds = resourceGrp.resources;
-      const resources = await Resource.find({ _id: { $in: resourceIds } });
-      const titles = resources.map(resource => resource.title);
+      const titles = await ResourceGrp.aggregate([
+        { $match: { _id: plan.grpId } },
+        { $unwind: '$resources' },
+        {
+            $lookup: {
+                from: 'resources',
+                localField: 'resources.rId',
+                foreignField: '_id',
+                as: 'resourceDetails'
+            }
+        },
+        { $unwind: '$resourceDetails' },
+        {
+            $project: {
+                title: '$resourceDetails.title',
+                access: '$resources.access'
+            }
+        }
+    ]);
 
       return {
         _id: plan._id,

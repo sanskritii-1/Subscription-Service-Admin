@@ -5,6 +5,8 @@ export interface IResource extends Document{
     description: string,
     url: string,
     blur_url: string,
+    createdAt: Date,
+    updatedAt: Date,
 }
 
 const resourceSchema = new mongoose.Schema<IResource>({
@@ -28,6 +30,8 @@ const resourceSchema = new mongoose.Schema<IResource>({
         required: true,
         unique: true,
     }
+},{
+    timestamps: true,
 })
 
 

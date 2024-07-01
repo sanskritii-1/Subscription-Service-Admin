@@ -7,6 +7,8 @@ export interface ISubscription extends Document {
     planId: mongoose.Types.ObjectId | IPlan;
     startDate: Date;
     endDate: Date;
+    createdAt: Date,
+    updatedAt: Date,
 }
 
 const subscriptionSchema = new Schema<ISubscription>({
