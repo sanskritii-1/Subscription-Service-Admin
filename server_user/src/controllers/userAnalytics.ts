@@ -4,6 +4,7 @@ import User, { IUser } from '../models/user';
 import Subscription from '../models/transaction';
 import Plan from '../models/plan';
 import { success, error } from '../utils/response';
+import mongoose from 'mongoose';
 
 export const getUserResourceDetails = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
     try {
@@ -42,11 +43,32 @@ export const getUserResourceDetails = async (req: Request, res: Response, next: 
             const planId = subscription ? subscription.planId : null;
             const plan = planId ? await Plan.findById(planId, 'name') : null;
 
+            const accessedResources = await UserResource.aggregate([
+                { $match: { userId: userId } },
+                { $unwind: '$resourceAccess' },
+                {
+                    $lookup: {
+                        from: 'resources',
+                        localField: 'resourceAccess.rId',
+                        foreignField: '_id',
+                        as: 'resourceDetails'
+                    }
+                },
+                { $unwind: '$resourceDetails' },
+                {
+                    $project: {
+                        title: '$resourceDetails.title',
+                        access: '$resourceAccess.access'
+                    }
+                }
+            ]);
+
             return {
                 userId: userId,
                 userName: user?.name,
                 userEmail: user?.email,
-                leftResources: userResource.leftResources,
+                // leftResources: userResource.leftResources,
+                accessedResources,
                 planName: plan ? plan.name : 'No active plan',
             };
         }));

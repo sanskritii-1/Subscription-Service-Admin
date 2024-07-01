@@ -12,7 +12,7 @@ export default function Plans() {
   const fetchSubscriptions = async () => {
     try {
       const res = await sendData("GET", "manage-subscription", true);
-      const data=res.plans;
+      const data=res.planData;
       console.log(data);
       if (Array.isArray(data)) {
         setSubscriptions(data);
@@ -54,6 +54,10 @@ export default function Plans() {
               {subscription.resources === -1
                 ? "Unlimited Resource Access"
                 : `${subscription.resources} Resource Access`}
+            </div>
+            <p>Available Resources:</p>
+            <div>
+              {subscription.titles.join(', ')}
             </div>
             <Link to={`/edit/${subscription._id}`} className={classes.link}>Edit</Link>
             <button onClick={() => deleteHandler(subscription._id)} className={classes.deleteButton}>Delete Plan</button>

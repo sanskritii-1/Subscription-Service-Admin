@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSendData } from "../helper/utils";
 import classes from "./UserAnalytics.module.css";
 
+interface IAccessResource{
+  title: string,
+  access: number,
+}
 export default function UserAnalytics() {
   const [search, setSearch] = useState("");
   const [userAnalytics, setUserAnalytics] = useState<any[]>([]);
@@ -64,9 +68,9 @@ export default function UserAnalytics() {
               <th>User Name</th>
               <th>User E-mail</th>
               <th>Subscription</th>
-              <th>Number of resources Left</th>
+              {/* <th>Number of resources Left</th> */}
               <th>Resources Accessed</th>
-              <th>Resources Left</th>
+              {/* <th>Resources Left</th> */}
             </tr>
           </thead>
           <tbody>
@@ -75,9 +79,14 @@ export default function UserAnalytics() {
                 <td>{user.userName}</td>
                 <td>{user.userEmail}</td>
                 <td>{user.planName}</td>
-                <td>{user.leftResources}</td>
-                <td>{user.accessedResources}</td>
-                <td>{user.leftResources}</td>
+                {/* <td>{user.leftResources}</td> */}
+                {/* <td>{user.accessedResources.map((resource:IAccessResource) =>
+                  `${resource.title}: ${resource.access}`
+                ).join(', ')}</td> */}
+                <td>{user.accessedResources.map((resource:IAccessResource) =>
+                  <p>{resource.title}: {resource.access}</p>
+                )}</td>
+                {/* <td>{user.leftResources}</td> */}
               </tr>
             ))}
           </tbody>

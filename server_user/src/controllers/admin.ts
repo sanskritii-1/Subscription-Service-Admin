@@ -1,7 +1,9 @@
-import { Request, Response } from 'express';
-import Plan from '../models/plan';
+import { NextFunction, Request, Response } from 'express';
+import Plan, { IPlan } from '../models/plan';
 import Joi from 'joi';
 import {success,error} from "../utils/response";
+import ResourceGrp, { IResourceGrp } from '../models/resourceGrp';
+import Resource from '../models/resources';
 
 const planSchema = Joi.object({
   name: Joi.string().required(),
@@ -72,11 +74,33 @@ export const getPlan = async (req: Request, res: Response) => {
 };
 
 
-export const getPlans = async (req: Request, res: Response) => {
+export const getPlans = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const plans = await Plan.find();
+    const plans = await Plan.find<IPlan>();
+
     if(plans.length == 0) return res.status(404).json({error: "No subscription plans found"});
-    return res.status(200).json(success(200,{plans}));
+
+    const planData = await Promise.all(plans.map(async (plan)=>{
+      const resourceGrp = await ResourceGrp.findById<IResourceGrp>(plan.grpId);
+      if(!resourceGrp){
+        return next({status:400, message: "Resource Group not found"})
+      }
+
+      const resourceIds = resourceGrp.resources;
+      const resources = await Resource.find({ _id: { $in: resourceIds } });
+      const titles = resources.map(resource => resource.title);
+
+      return {
+        _id: plan._id,
+        name: plan.name,
+        resources: plan.resources,
+        features: plan.features,
+        duration: plan.duration,
+        titles
+      }
+    }))
+
+    return res.status(200).json(success(200,{planData}));
     // res.status(200).json(plans);
   } catch (error) {
      return res.status(500).json({ error: 'Server error' });
