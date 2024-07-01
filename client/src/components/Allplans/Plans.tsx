@@ -4,6 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import classes from "./Plans.module.css";
 import toast from 'react-hot-toast';
 
+interface IAccessResource{
+  title: string,
+  access: number,
+}
 export default function Plans() {
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
   const navigate = useNavigate();
@@ -57,7 +61,7 @@ export default function Plans() {
             </div>
             <p>Available Resources:</p>
             <div>
-              {subscription.titles.join(', ')}
+              {subscription.titles.map((resource:IAccessResource)=>`${resource.title}: ${resource.access}`).join(', ')}
             </div>
             <Link to={`/edit/${subscription._id}`} className={classes.link}>Edit</Link>
             <button onClick={() => deleteHandler(subscription._id)} className={classes.deleteButton}>Delete Plan</button>
