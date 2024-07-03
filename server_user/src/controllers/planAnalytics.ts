@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import Subscription from '../models/transaction';
+import Subscription from '../models/subscription';
 import Plan from '../models/plan';
 import { success } from '../utils/response';
 import moment from 'moment';

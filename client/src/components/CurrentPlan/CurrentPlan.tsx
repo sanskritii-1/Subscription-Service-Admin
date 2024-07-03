@@ -21,7 +21,8 @@ const CurrentPage: React.FC = () => {
     const fetchCurrentPlans = async () => {
       try {
         const response = await sendData('GET', 'get-payment-info', true);
-        setPayments(response);
+        console.log(response);
+        setPayments(response.paymentHistory);
       } catch (error) {
         setError('Error fetching current plans');
       } finally {

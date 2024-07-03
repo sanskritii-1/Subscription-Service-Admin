@@ -1,10 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import UserResource, { IUserResources } from '../models/userResource';
 import User, { IUser } from '../models/user';
-import Subscription from '../models/transaction';
+import Subscription from '../models/subscription';
 import Plan from '../models/plan';
 import { success, error } from '../utils/response';
-import mongoose from 'mongoose';
 import ResourceGrp from '../models/resourceGrp';
 
 export const getUserResourceDetails = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {

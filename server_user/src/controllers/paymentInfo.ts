@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import User, { IUser } from '../models/user';
 import Plan, { IPlan } from '../models/plan';
-import Subscription, { ISubscription } from '../models/transaction';
+import Subscription, { ISubscription } from '../models/subscription';
 import {success,error} from "../utils/response";
 
 export const getPaymentHistory = async (req: Request, res: Response) => {
@@ -25,9 +25,7 @@ export const getPaymentHistory = async (req: Request, res: Response) => {
       };
     })
   );
-
     return res.status(200).json(success(200,{paymentHistory}));
-    res.status(200).json(paymentHistory);
   } catch (error) {
     console.error('Error fetching payment history:', error);
     res.status(500).json({ error: 'Error fetching payment history'});

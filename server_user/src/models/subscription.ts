@@ -18,5 +18,5 @@ const subscriptionSchema = new Schema<ISubscription>({
     endDate: { type: Date, required: true },
 }, { timestamps: true });
 
-const Subscription = mongoose.model<ISubscription>('Transaction', subscriptionSchema);
+const Subscription = mongoose.model<ISubscription>('Subscription', subscriptionSchema);
 export default Subscription;
