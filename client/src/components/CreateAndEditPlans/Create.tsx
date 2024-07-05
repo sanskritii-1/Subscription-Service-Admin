@@ -24,6 +24,12 @@ export default function CreateForm() {
 
   const createPlanHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const resarr: string[] = [];
+    for (let i = 0; i < isChecked.length; i++) {
+      if (isChecked[i].checkProperty) {
+        resarr.push(isChecked[i].id);
+      }
+    }
     try {
       const data = {
         name: name,
@@ -31,6 +37,7 @@ export default function CreateForm() {
         price: price,
         duration: duration,
         resources: resources,
+        resourceArray: resarr,
       };
       await sendData("POST", "manage-subscription", true, data);
       navigate("/subscription-plans");
@@ -160,18 +167,22 @@ export default function CreateForm() {
           <ul style={{ listStyle: "none" }}>
             {modalContent.map((res) => (
               <li key={res._id}>
-                <div style={{display:"flex", justifyContent:"space-between"}}>
-                <div><input
-                  type="checkbox"
-                  id={res._id}
-                  name="myCheckbox"
-                  checked={
-                    isChecked.find((ch) => ch.id === res._id)?.checkProperty ||
-                    false
-                  }
-                  onChange={(event) => handleCheckboxChange(event, res._id)}
-                /></div>
-                <div>{res.title}</div>
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <div>
+                    <input
+                      type="checkbox"
+                      id={res._id}
+                      name="myCheckbox"
+                      checked={
+                        isChecked.find((ch) => ch.id === res._id)
+                          ?.checkProperty || false
+                      }
+                      onChange={(event) => handleCheckboxChange(event, res._id)}
+                    />
+                  </div>
+                  <div>{res.title}</div>
                 </div>
               </li>
             ))}
