@@ -160,7 +160,8 @@ export default function CreateForm() {
           <ul style={{ listStyle: "none" }}>
             {modalContent.map((res) => (
               <li key={res._id}>
-                <input
+                <div style={{display:"flex", justifyContent:"space-between"}}>
+                <div><input
                   type="checkbox"
                   id={res._id}
                   name="myCheckbox"
@@ -169,13 +170,14 @@ export default function CreateForm() {
                     false
                   }
                   onChange={(event) => handleCheckboxChange(event, res._id)}
-                />
-                {res.title}
+                /></div>
+                <div>{res.title}</div>
+                </div>
               </li>
             ))}
           </ul>
           <button onClick={closeModal} type="button">
-            Close
+            Add
           </button>
         </ResourcesModal>
         <button type="submit">Create Plan</button>
