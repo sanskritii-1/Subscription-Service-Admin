@@ -2,7 +2,6 @@ import express, { Request, Response, Express } from 'express';
 import cors from "cors";
 import User, { IUser } from './models/user';
 import connectDB from './config/dbConfig';
-import userRouter from './routes/user'
 import adminRouter from './routes/admin'
 import { ErrorMiddleware } from './middlewares/error';
 

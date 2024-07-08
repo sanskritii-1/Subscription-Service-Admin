@@ -1,5 +1,7 @@
 # To run the application
 
+The application has 2 folders, the client and the server.
+
 ## Client directory
 
 ### `npm i` 
@@ -21,7 +23,7 @@ You will also see any lint errors in the console.
 
 Installs the packages required to run the server.
 
-### src/config/appConfig.ts
+### `src/config/appConfig.ts`
 
 File to check the environment variables required to run the server.
 

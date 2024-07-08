@@ -10,7 +10,7 @@ export default function UserAnalytics() {
   const [search, setSearch] = useState("");
   const [userAnalytics, setUserAnalytics] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(1);
+  const [limit, setLimit] = useState(4);
   const [totalPages, setTotalPages] = useState(1);
   const sendData = useSendData();
 
