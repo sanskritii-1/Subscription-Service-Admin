@@ -71,11 +71,13 @@ export default function CreateForm() {
         };
         console.log("present");
         return updatedChecks;
-      } else {
+      } 
+      else if(access>0){
         const newCheck = { id, access, checkProperty: true };
         console.log("absent");
         return [...prev, newCheck];
       }
+      return prev;
     });
     console.log(isChecked);
   };
