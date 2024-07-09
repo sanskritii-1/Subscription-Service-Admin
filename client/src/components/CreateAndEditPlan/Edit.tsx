@@ -2,6 +2,20 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSendData } from "../../helper/util";
 import classes from "./Edit.module.css";
+import styles from "./Edit.module.css";
+import ResourcesModal from "./ResourcesModal";
+
+interface CheckType {
+  rId: string;
+  access: number;
+  checkProperty: boolean;
+}
+
+interface grpType{
+  rId: string,
+  access: number,
+}
+
 
 export default function EditForm() {
   const { id } = useParams();
@@ -10,6 +24,10 @@ export default function EditForm() {
   const [price, setPrice] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [features, setFeatures] = useState<string>("");
+  const [isChecked, setIsChecked] = useState<CheckType[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<any[]>([]);
+
   const navigate = useNavigate();
   const sendData = useSendData();
 
@@ -23,13 +41,18 @@ export default function EditForm() {
         );
         console.log("hii");
         const resData=res.plan;
-        console.log(res);
+        console.log(resData);
 
         setName(resData.name);
         setDuration(resData.duration);
         setResources(resData.resources);
         setPrice(resData.price);
         setFeatures(resData.features);
+        const updatedResources = resData.resourceArray.map((item: grpType) => ({
+          ...item,
+          checkProperty: true
+        }));
+        setIsChecked(updatedResources);
       } catch (err) {
         console.log(err);
       }
@@ -40,12 +63,22 @@ export default function EditForm() {
   const editPlanHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      const resarr: grpType[] = [];
+      let resources = 0;
+      for (let i = 0; i < isChecked.length; i++) {
+        if (isChecked[i].checkProperty) {
+          resources++;
+          resarr.push({rId:isChecked[i].rId, access: isChecked[i].access});
+        }
+      }
+
       const data = {
         name: name,
         resources: resources,
         price: price,
         duration: duration,
         features: features,
+        resourceArray: resarr,
       };
       const response = await sendData(
         "PUT",
@@ -59,6 +92,53 @@ export default function EditForm() {
     }
   };
 
+
+  const handleCheckboxChange = (
+    // event: React.ChangeEvent<HTMLInputElement>,
+    rId: string,
+    access: number,
+  ) => {
+    setIsChecked((prev) => {
+      const index = prev.findIndex((pr) => pr.rId === rId);
+      if (index >= 0) {
+        const updatedChecks = [...prev];
+        updatedChecks[index] = {
+          ...updatedChecks[index],
+          access: access,
+          checkProperty: access>0,
+        };
+        console.log("present");
+        return updatedChecks;
+      } 
+      else if(access>0){
+        const newCheck = { rId, access, checkProperty: true };
+        console.log("absent");
+        return [...prev, newCheck];
+      }
+      return prev;
+    });
+    console.log(isChecked);
+  };
+
+  const openModal = async () => {
+    setIsModalOpen(true);
+
+    try {
+
+      const response = await sendData("GET", 'get-resources', true);
+
+      setModalContent(response.resources);
+    }
+    catch (err) {
+      console.error(err);
+      // throw err;
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div>
       <h1 className={classes.h1}>Edit the plan</h1>
@@ -70,13 +150,13 @@ export default function EditForm() {
           onChange={(e) => setName(e.target.value)}
           required
         />
-        <label>Number of resources:</label>
+        {/* <label>Number of resources:</label>
         <input
           type="number"
           value={resources}
           onChange={(e) => setResources(e.target.valueAsNumber)}
           required
-        />
+        /> */}
         <label>Price of Plan:</label>
         <input
           type="number"
@@ -98,6 +178,64 @@ export default function EditForm() {
           onChange={(e) => setFeatures(e.target.value)}
         />
         
+
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            margin: "0vh 0vw 2vh 0vw",
+          }}
+        >
+          <div>
+            <label>Add Resources:</label>
+          </div>
+          <div>
+            <button
+              type="button"
+              style={{ margin: "0vh 0vw 0vh 2vw" }}
+              onClick={openModal}
+            >
+              +
+            </button>
+          </div>
+        </div>
+
+        <ResourcesModal show={isModalOpen} onClose={closeModal}>
+          <h2>Modal Title</h2>
+          <button onClick={closeModal} type="button" className={styles.closeButton}>
+            X
+          </button>
+          <div className={styles.imgContainer}>
+          {modalContent.map((res) => (
+              <div
+                key={res._id}
+                className={styles.card}
+                onClick={() => handleCheckboxChange(res._id,1)}
+              >
+                <input
+                  type="checkbox"
+                  className={styles.checkbox}
+                  checked={isChecked.find((ch) => ch.rId === res._id)?.checkProperty || false}
+                  onChange={() => handleCheckboxChange(res._id,1)}
+                />
+                <h2 className={styles.title}>{res.title}</h2>
+                <img className={styles.image} src={res.url} alt={res.title} />
+                {/* <p className={styles.description}>{res.description}</p> */}
+                <input 
+                placeholder="Number of access" 
+                type="number" 
+                className={styles.accessNum}
+                value={isChecked.find((ch) => ch.rId === res._id)?.access || ''}
+                onChange={(e) => handleCheckboxChange(res._id, parseInt(e.target.value))}                
+                onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+          ))}
+          </div>
+          <button onClick={closeModal} type="button">
+            Add
+          </button>
+        </ResourcesModal>
         <button className={classes.editButton}>Edit Plan</button>
       </form>
     </div>

@@ -39,12 +39,20 @@ export const createPlan = async (req: Request, res: Response, next: NextFunction
 
 export const updatePlan = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const plan = await Plan.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const data = {
+        name: req.body.name,
+        features: req.body.features,
+        price: req.body.price,
+        duration: req.body.duration,
+        resources: req.body.resources,
+    }
+    const plan = await Plan.findByIdAndUpdate(req.params.id, data, { new: true });
     if (!plan) {
       const err: CustomError = new Error("Plan not found");
       err.status = 404;
       return next(err);
     }
+    const grpReso = await ResourceGrp.findByIdAndUpdate(plan.grpId, {resources: req.body.resourceArray})
     return res.status(200).json(success(200, { message: 'Plan updated successfully', plan }));
   } catch (error) {
     next(error);
@@ -67,11 +75,20 @@ export const deletePlan = async (req: Request, res: Response, next: NextFunction
 
 export const getPlan = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const plan = await Plan.findById(req.params.id);
-    if (!plan) {
+    const planDetails = await Plan.findById(req.params.id);
+    if (!planDetails) {
       const err: CustomError = new Error("Plan not found");
       err.status = 404;
       return next(err);
+    }
+    const grpDetails = await ResourceGrp.findById(planDetails.grpId);
+    const plan = {
+      name: planDetails.name,
+      resources: planDetails.resources,
+      price: planDetails.price,
+      features: planDetails.features,
+      duration: planDetails.duration,
+      resourceArray: grpDetails?.resources,
     }
     return res.status(200).json(success(200, { plan }));
   } catch (error) {

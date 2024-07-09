@@ -14,17 +14,3 @@ export const planValidationSchema = Joi.object({
     duration: Joi.number().required(),
     resourceArray: Joi.array().required(),
 });
-
-
-export const createResourceValidationSchema = Joi.object({
-    planId: Joi.string().length(24).hex().required(),
-});
-
-export const updateResourceValidationSchema = Joi.object({
-    planName: Joi.string().required(),
-})
-
-export const paymentValidationSchema = Joi.object({
-    amount: Joi.number().required(),
-    planId: Joi.string().length(24).hex().required(),
-})

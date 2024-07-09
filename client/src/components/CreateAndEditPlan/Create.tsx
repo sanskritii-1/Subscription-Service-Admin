@@ -6,7 +6,7 @@ import classes from "./Create.module.css";
 import ResourcesModal from "./ResourcesModal";
 
 interface CheckType {
-  id: string;
+  rId: string;
   access: number;
   checkProperty: boolean;
 }
@@ -30,15 +30,16 @@ export default function CreateForm() {
 
   const createPlanHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const resarr: grpType[] = [];
-    let resources = 0;
-    for (let i = 0; i < isChecked.length; i++) {
-      if (isChecked[i].checkProperty) {
-        resources++;
-        resarr.push({rId:isChecked[i].id, access: isChecked[i].access});
-      }
-    }
     try {
+      const resarr: grpType[] = [];
+      let resources = 0;
+      for (let i = 0; i < isChecked.length; i++) {
+        if (isChecked[i].checkProperty) {
+          resources++;
+          resarr.push({rId:isChecked[i].rId, access: isChecked[i].access});
+        }
+      }
+      
       const data = {
         name: name,
         features: features,
@@ -56,24 +57,23 @@ export default function CreateForm() {
 
   const handleCheckboxChange = (
     // event: React.ChangeEvent<HTMLInputElement>,
-    id: string,
+    rId: string,
     access: number,
   ) => {
     setIsChecked((prev) => {
-      const index = prev.findIndex((pr) => pr.id === id);
+      const index = prev.findIndex((pr) => pr.rId === rId);
       if (index >= 0) {
         const updatedChecks = [...prev];
         updatedChecks[index] = {
           ...updatedChecks[index],
           access: access,
           checkProperty: access>0,
-          // checkProperty: !updatedChecks[index].checkProperty,
         };
         console.log("present");
         return updatedChecks;
       } 
       else if(access>0){
-        const newCheck = { id, access, checkProperty: true };
+        const newCheck = { rId, access, checkProperty: true };
         console.log("absent");
         return [...prev, newCheck];
       }
@@ -126,6 +126,12 @@ export default function CreateForm() {
           onChange={(e) => setDuration(e.target.valueAsNumber)}
           required
         />
+            <label>Features(Optional):</label>
+          <input
+            type="text"
+            value={features}
+            onChange={(e) => setFeatures(e.target.value)}
+          />
         <div
           style={{
             display: "flex",
@@ -133,12 +139,6 @@ export default function CreateForm() {
             margin: "0vh 0vw 2vh 0vw",
           }}
         >
-          <label>Number of resources:</label>
-        <input
-          type="text"
-          value={features}
-          onChange={(e) => setFeatures(e.target.value)}
-        />
           <div>
             <label>Add Resources:</label>
           </div>
@@ -157,7 +157,6 @@ export default function CreateForm() {
           <button onClick={closeModal} type="button" className={styles.closeButton}>
             X
           </button>
-          {/* <ul style={{ listStyle: "none" }}> */}
           <div className={styles.imgContainer}>
           {modalContent.map((res) => (
 
@@ -169,7 +168,7 @@ export default function CreateForm() {
                 <input
                   type="checkbox"
                   className={styles.checkbox}
-                  checked={isChecked.find((ch) => ch.id === res._id)?.checkProperty || false}
+                  checked={isChecked.find((ch) => ch.rId === res._id)?.checkProperty || false}
                   onChange={() => handleCheckboxChange(res._id,1)}
                 />
                 <h2 className={styles.title}>{res.title}</h2>
@@ -179,14 +178,13 @@ export default function CreateForm() {
                 placeholder="Number of access" 
                 type="number" 
                 className={styles.accessNum}
-                value={isChecked.find((ch) => ch.id === res._id)?.access || ''}
+                value={isChecked.find((ch) => ch.rId === res._id)?.access || ''}
                 onChange={(e) => handleCheckboxChange(res._id, parseInt(e.target.value))}                
                 onClick={(e) => e.stopPropagation()}
                 />
               </div>
           ))}
           </div>
-          {/* </ul> */}
           <button onClick={closeModal} type="button">
             Add
           </button>
