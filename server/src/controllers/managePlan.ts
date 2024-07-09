@@ -100,7 +100,7 @@ export const getPlan = async (req: Request, res: Response, next: NextFunction) =
 export const getPlans = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const plans = await Plan.find<IPlan>();
-
+    console.log('get plans; ', plans)
     if (plans.length == 0){
       const err: CustomError = new Error("No subscription plans found");
       err.status = 404;
