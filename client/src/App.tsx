@@ -4,12 +4,12 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Create from "./pages/Create";
 import Edit from "./pages/Edit";
 import HomePage from "./pages/Home";
-import SubscriptionPlans from "./pages/SubscriptionPlans";
-import LoginPage from "./pages/LoginPage";
-import InfoPage from './pages/InfoPage';
-import CurrentPlanPage from './pages/CurrentPlanPage';
-import PlanAnalytics from "./components/PlanAnalytics/PlanAnalytics";
-import UserAnalytics from "./components/UserAnalytics/UserAnalytics";
+import SubscriptionPlans from "./pages/SubscriptionPlan";
+import LoginPage from "./pages/Login";
+import InfoPage from './pages/Transaction';
+import CurrentPlanPage from './pages/CurrentPlan';
+import PlanAnalytics from "./components/PlanAnalytic/PlanAnalytic";
+import UserAnalytics from "./components/UserAnalytic/UserAnalytic";
 
 
 

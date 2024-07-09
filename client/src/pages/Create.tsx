@@ -1,5 +1,5 @@
 import React from 'react'
-import CreateForm from '../components/CreateAndEditPlans/Create'
+import CreateForm from '../components/CreateAndEditPlan/Create'
 
 export default function Create() {
   return (

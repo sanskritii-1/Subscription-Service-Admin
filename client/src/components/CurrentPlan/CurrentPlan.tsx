@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSendData } from '../helper/utils';
+import { useSendData } from '../../helper/util';
 import './Styling.css';
 import { FaUser, FaEnvelope, FaCalendarAlt, FaIdBadge } from 'react-icons/fa';
 
