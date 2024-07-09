@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useSendData } from '../../helper/util';
 import './Styling.css';
-import { FaUser, FaEnvelope, FaIdBadge, FaCalendarAlt, FaRegClock, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaIdBadge, FaCalendarAlt, FaRegClock, FaCheckCircle, FaTimesCircle, FaListAlt, FaDollarSign, FaCreditCard, FaHourglassHalf } from 'react-icons/fa';
 
 interface Payment {
   id: string;
   userName: string;
   userEmail: string;
   planName: string;
-  startDate: string;
+  amount: number;
+  date: string;
   status: string;
+  paymentMethod: string;
 }
 
 const Info: React.FC = () => {
@@ -21,9 +23,9 @@ const Info: React.FC = () => {
   useEffect(() => {
     const fetchPaymentHistory = async () => {
       try {
-        const response = await sendData('GET', 'get-payment-info', true);
-          setPayments(response.paymentHistory);
-          console.log(response.paymentHistory);
+        const response = await sendData('GET', 'get-transactions', true);
+        setPayments(response.paymentHistory);
+        console.log(response.paymentHistory);
 
       } catch (error) {
         setError('Error fetching payment history');
@@ -38,33 +40,39 @@ const Info: React.FC = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
-  return  (
+  return (
     <div className="payment-table-container">
       <h2>Transactions Made</h2>
       <table className="payment-table">
         <thead>
           <tr>
-            <th><FaIdBadge className="icon" />Transaction Id</th>
-            <th><FaUser className="icon" />User Name</th>
-            <th><FaEnvelope className="icon" />User Email</th>
-            <th><FaCalendarAlt className="icon" />Plan Name</th>
-            <th><FaCalendarAlt className="icon" />Start Date</th>
-            <th><FaRegClock className="icon" />Status</th>
+            <th><FaIdBadge className="icon" /> Transaction Id</th>
+            <th><FaUser className="icon" /> User Name</th>
+            <th><FaEnvelope className="icon" /> User Email</th>
+            <th><FaListAlt className="icon" /> Plan Name</th>
+            <th><FaDollarSign className="icon" /> Amount</th>
+            <th><FaCalendarAlt className="icon" /> Date</th>
+            <th><FaCreditCard className="icon" /> Payment Method</th>
+            <th><FaRegClock className="icon" /> Status</th>
           </tr>
         </thead>
         <tbody>
-          {payments&&payments.map(payment => (
+          {payments && payments.map(payment => (
             <tr key={payment.id}>
               <td>{payment.id}</td>
               <td>{payment.userName}</td>
               <td>{payment.userEmail}</td>
               <td>{payment.planName}</td>
-              <td>{new Date(payment.startDate).toLocaleDateString()}</td>
+              <td>{payment.amount}</td>
+              <td>{new Date(payment.date).toLocaleDateString()}</td>
+              <td>{payment.paymentMethod}</td>
               <td>
-                {payment.status === 'active' ? (
+                {payment.status === 'succeeded' ? (
                   <FaCheckCircle className="icon" style={{ color: 'green' }} />
-                ) : (
+                ) : payment.status === 'failed' ? (
                   <FaTimesCircle className="icon" style={{ color: 'red' }} />
+                ) : (
+                  <FaHourglassHalf className="icon" style={{ color: 'grey' }} />
                 )}
                 {payment.status}
               </td>

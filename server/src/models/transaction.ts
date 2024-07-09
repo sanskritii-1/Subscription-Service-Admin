@@ -8,6 +8,8 @@ export interface ITransaction extends Document{
     paymentMethod: string,
     status: string,
     receipt: string,
+    createdAt: string,
+    updatedAt: string,
 }
 
 const transactionSchema = new mongoose.Schema({
