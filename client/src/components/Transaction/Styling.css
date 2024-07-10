@@ -1,6 +1,7 @@
 .payment-table-container {
   background-image: url('https://www.pexels.com/photo/macro-shot-of-wooden-planks-326333/');
   margin: 20px;
+  text-align: center;
 }
 
 
@@ -25,4 +26,18 @@
 .icon {
   margin-right: 5px;
   vertical-align: middle;
+}
+.sort-button-container {
+  display: flex;
+  justify-content: flex-end; 
+  margin-bottom: 10px;
+}
+.sort-button{
+  left: auto;
+  background-color: #dabcbc;
+  border-radius: 5px;
+}
+
+.sort-img{
+  width:15px;
 }

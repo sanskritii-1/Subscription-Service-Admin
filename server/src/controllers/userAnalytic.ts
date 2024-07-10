@@ -29,7 +29,7 @@ export const getUserResourceDetails = async (req: Request, res: Response, next: 
             const plan = await Plan.findOne({ name: planName });
             if (plan) {
                 const subscriptionIds = await Subscription.aggregate([
-                    { $sort: { userId: 1, startDate: -1 } },
+                    { $sort: { startDate: -1 } },
                     { $group: { _id: "$userId", mostRecentPlan: { $first: "$planId" } } },
                     { $match: { mostRecentPlan: plan._id } },
                     { $project: { userId: "$_id" } }
@@ -122,7 +122,7 @@ export const getUserResourceDetails = async (req: Request, res: Response, next: 
                 totalResources,
                 leftResources,
                 planName: plan ? plan.name : 'No active plan',
-                updatedDate: updatedDate?.toLocaleDateString(),
+                updatedDate: updatedDate?.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }),
             };
         }));
 

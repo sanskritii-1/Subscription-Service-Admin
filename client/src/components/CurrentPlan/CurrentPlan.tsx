@@ -36,17 +36,6 @@ const CurrentPage: React.FC = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
-  // Function to filter current plans for each unique email ID
-  // const getCurrentPlansForUniqueEmails = () => {
-  //   const currentDate = new Date();
-  //   const uniqueEmails = Array.from(new Set(payments.map(payment => payment.userEmail)));
-  //   const currentPlans = uniqueEmails.map(email => {
-  //     const user = payments.find(payment => payment.userEmail === email);
-  //     const plansForEmail = payments.filter(payment => payment.userEmail === email && new Date(payment.endDate) >= currentDate);
-  //     return { userName: user?.userName, userEmail: email, currentPlans: plansForEmail.map(plan => plan.planName) };
-  //   });
-  //   return currentPlans;
-  // };
   const getCurrentPlansForUniqueEmails = () => {
     const currentDate = new Date();
     const uniqueEmails = Array.from(new Set(payments.map(payment => payment.userEmail)));
@@ -57,7 +46,7 @@ const CurrentPage: React.FC = () => {
       // Sort plans by startDate and take the latest one
       const latestPlan = plansForEmail.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())[0];
       
-      return { userName: user?.userName, userEmail: email, currentPlan: latestPlan?.planName || 'No current plans' };
+      return { userName: user?.userName, userEmail: email, currentPlan: latestPlan?.planName || 'No current plans', startDate: latestPlan ? new Date(latestPlan.startDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'N/A'  };
     });
     return currentPlans;
   };
@@ -73,6 +62,7 @@ const CurrentPage: React.FC = () => {
             <th><FaUser className="icon" />User Name</th>
             <th><FaEnvelope className="icon" />User Email</th>
             <th><FaCalendarAlt className="icon" />Current Plans</th>
+            <th><FaCalendarAlt className="icon" />Start Date</th>
           </tr>
         </thead>
         <tbody>
@@ -82,6 +72,7 @@ const CurrentPage: React.FC = () => {
               <td>{userData.userName}</td>
               <td>{userData.userEmail}</td>
               <td>{userData.currentPlan}</td>
+              <td>{userData.startDate}</td>
               {/* <td>{userData.currentPlans.length > 0 ? userData.currentPlans.join(', ') : 'No current plans'}</td> */}
             </tr>
           ))}

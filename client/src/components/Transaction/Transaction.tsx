@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSendData } from '../../helper/util';
 import './Styling.css';
+import sortImage from '../../assets/images/sort.png'
 import { FaUser, FaEnvelope, FaIdBadge, FaCalendarAlt, FaRegClock, FaCheckCircle, FaTimesCircle, FaListAlt, FaDollarSign, FaCreditCard, FaHourglassHalf } from 'react-icons/fa';
 
 interface Payment {
@@ -18,6 +19,7 @@ const Info: React.FC = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [sortAsc, setSortAsc] = useState<boolean>(true);
   const sendData = useSendData();
 
   useEffect(() => {
@@ -37,12 +39,28 @@ const Info: React.FC = () => {
     fetchPaymentHistory();
   }, []);
 
+  const toggleSortOrder = () => {
+    setSortAsc(prev => !prev);
+    // Sort payments based on date
+    const sortedPayments = [...payments].sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return sortAsc ? dateB - dateA : dateA - dateB ; // Ascending or descending
+    });
+    setPayments(sortedPayments);
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
     <div className="payment-table-container">
       <h2>Transactions Made</h2>
+      <div className="sort-button-container">
+        <button onClick={toggleSortOrder} className="sort-button">
+          <img src={sortImage} alt='sort' className='sort-img'/>
+        </button>
+      </div>
       <table className="payment-table">
         <thead>
           <tr>
@@ -64,7 +82,7 @@ const Info: React.FC = () => {
               <td>{payment.userEmail}</td>
               <td>{payment.planName}</td>
               <td>{payment.amount}</td>
-              <td>{new Date(payment.date).toLocaleDateString()}</td>
+              <td>{new Date(payment.date).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</td>
               <td>{payment.paymentMethod}</td>
               <td>
                 {payment.status === 'succeeded' ? (

@@ -14,7 +14,7 @@ export default function UserAnalytics() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(4);
   const [totalPages, setTotalPages] = useState(1);
-  const [updatedAt, setUpdatedAt] = useState<string>(""); // Updated date state
+  const [updatedAt, setUpdatedAt] = useState<string>(""); 
   const sendData = useSendData();
 
   async function fetchUserAnalytics() {
