@@ -1,25 +1,25 @@
-.payment-table-container {
+.paymentTableContainer {
   background-image: url('https://www.pexels.com/photo/macro-shot-of-wooden-planks-326333/');
   margin: 20px;
   text-align: center;
 }
 
 
-.payment-table {
+.paymentTable {
   width: 100%;
   border: 1px solid #0d0101;
 }
 
-.payment-table th, .payment-table td {
+.paymentTable th, .paymentTable td {
   padding: 7px;
   text-align: left;
 }
 
-.payment-table th {
+.paymentTable th {
   background-color: #937979;
 }
 
-.payment-table tbody tr:nth-child(even) {
+.paymentTable tbody tr:nth-child(even) {
   background-color: #dabcbc;
 }
 
@@ -27,17 +27,19 @@
   margin-right: 5px;
   vertical-align: middle;
 }
-.sort-button-container {
+.sortButtonContainer {
   display: flex;
   justify-content: flex-end; 
   margin-bottom: 10px;
 }
-.sort-button{
+.sortButton{
   left: auto;
   background-color: #dabcbc;
   border-radius: 5px;
+  width: 29px;
 }
 
-.sort-img{
-  width:15px;
+.sortImg{
+  height: 17px;
+  width: 15px;
 }

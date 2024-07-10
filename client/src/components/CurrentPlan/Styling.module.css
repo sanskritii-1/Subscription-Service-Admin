@@ -1,4 +1,4 @@
-div.table-container {
+div .tableContainer {
   /* background-image: url("https://images.saymedia-content.com/.image/t_share/MTkyOTkyMzE2OTQ3MDQ3NjQ1/website-background-templates.png");
   background-size: cover; 
   min-height: 100vh; 
@@ -12,7 +12,7 @@ div.table-container {
   border: 1px solid #0d0101;
 }
 
-.table th, .payment-table td {
+.table th, .paymentTable td {
   padding: 7px;
   text-align: left;
 }
@@ -28,4 +28,13 @@ div.table-container {
 .icon {
   margin-right: 5px;
   vertical-align: middle;
+}
+
+.sortImg{
+  height: 17px;
+  width: 15px;
+}
+
+.sortButton{
+  width: 29px;
 }

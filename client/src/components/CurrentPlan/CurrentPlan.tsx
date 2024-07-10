@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useSendData } from '../../helper/util';
-import './Styling.css';
-import sortImage from "../../assets/images/sort.png"
-import { FaUser, FaEnvelope, FaCalendarAlt, FaIdBadge } from 'react-icons/fa';
+import React, { useEffect, useState } from "react";
+import { useSendData } from "../../helper/util";
+import classes from "./Styling.module.css";
+import sortImage from "../../assets/images/sort.png";
+import { FaUser, FaEnvelope, FaCalendarAlt, FaIdBadge } from "react-icons/fa";
 
 interface Payment {
   userName: string;
@@ -21,11 +21,11 @@ const CurrentPage: React.FC = () => {
   useEffect(() => {
     const fetchCurrentPlans = async () => {
       try {
-        const response = await sendData('GET', 'get-current-plans', true);
+        const response = await sendData("GET", "get-current-plans", true);
         console.log(response);
         setPayments(response.paymentHistory);
       } catch (error) {
-        setError('Error fetching current plans');
+        setError("Error fetching current plans");
       } finally {
         setLoading(false);
       }
@@ -38,37 +38,52 @@ const CurrentPage: React.FC = () => {
   if (error) return <div>{error}</div>;
 
   const toggleSortOrder = () => {
-    setSortAsc(prev => !prev);
+    setSortAsc((prev) => !prev);
     const sortedPayments = [...payments].sort((a, b) => {
       const dateA = new Date(a.startDate).getTime();
       const dateB = new Date(b.startDate).getTime();
-      return sortAsc ? dateB - dateA : dateA - dateB ; 
+      return sortAsc ? dateB - dateA : dateA - dateB;
     });
     setPayments(sortedPayments);
   };
 
   return (
-    <div className="table-container">
+    <div className={classes.tableContainer}>
       <h2>Current Plans of Users</h2>
-      <div className="sort-button-container">
-        <button onClick={toggleSortOrder} className="sort-button">
-          <img src={sortImage} alt='sort' className='sort-img'/>
+      <div className={classes.sortButtonContainer}>
+        <button onClick={toggleSortOrder} className={classes.sortButton}>
+          <img src={sortImage} alt="sort" className={classes.sortImg} />
         </button>
       </div>
-      <table className="table">
+      <table className={classes.table}>
         <thead>
           <tr>
-            <th><FaIdBadge className="icon" />User</th>
-            <th><FaUser className="icon" />User Name</th>
-            <th><FaEnvelope className="icon" />User Email</th>
-            <th><FaCalendarAlt className="icon" />Current Plans</th>
-            <th><FaCalendarAlt className="icon" />Start Date</th>
+            <th>
+              <FaIdBadge className={classes.icon} />
+              User
+            </th>
+            <th>
+              <FaUser className={classes.icon} />
+              User Name
+            </th>
+            <th>
+              <FaEnvelope className={classes.icon} />
+              User Email
+            </th>
+            <th>
+              <FaCalendarAlt className={classes.icon} />
+              Current Plans
+            </th>
+            <th>
+              <FaCalendarAlt className={classes.icon} />
+              Start Date
+            </th>
           </tr>
         </thead>
         <tbody>
           {payments.map((userData, index) => (
             <tr key={index}>
-              <td>{index+1}</td>
+              <td>{index + 1}</td>
               <td>{userData.userName}</td>
               <td>{userData.userEmail}</td>
               <td>{userData.planName}</td>
