@@ -2,27 +2,33 @@ import React, { useState, useEffect } from "react";
 import { useSendData } from "../../helper/util";
 import classes from "./UserAnalytic.module.css";
 
-interface IAccessResource{
-  title: string,
-  access: number,
+interface IAccessResource {
+  title: string;
+  access: number;
 }
+
 export default function UserAnalytics() {
   const [search, setSearch] = useState("");
+  const [planName, setPlanName] = useState("");
   const [userAnalytics, setUserAnalytics] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(4);
   const [totalPages, setTotalPages] = useState(1);
+  const [updatedAt, setUpdatedAt] = useState<string>(""); // Updated date state
   const sendData = useSendData();
 
   async function fetchUserAnalytics() {
     try {
-      const response = await sendData(
-        "GET",
-        `user-analytics?page=${page}&limit=${limit}&keyword=${search}`,
-        true
-      );
+      let url = `user-analytics?page=${page}&limit=${limit}&keyword=${search}`;
+      if (planName) {
+        url += `&planName=${planName}`;
+      }
+      // if (updatedAt) {
+      //     url += `&updatedAt=${updatedAt}`;
+      // }
+
+      const response = await sendData("GET", url, true);
       setUserAnalytics(response.userDetails);
-      console.log("in user anly ui: ", response)
       setTotalPages(response.pagination.totalPages);
     } catch (err) {
       console.log(err);
@@ -31,7 +37,7 @@ export default function UserAnalytics() {
 
   useEffect(() => {
     fetchUserAnalytics();
-  }, [page, limit, search]);
+  }, [page, limit, search, planName, updatedAt]);
 
   const handleNextPage = () => {
     if (page < totalPages) {
@@ -51,6 +57,10 @@ export default function UserAnalytics() {
     fetchUserAnalytics();
   };
 
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUpdatedAt(e.target.value);
+  };
+
   return (
     <div>
       <form onSubmit={searchHandler} className={classes.form}>
@@ -60,6 +70,20 @@ export default function UserAnalytics() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+        <select
+          value={planName}
+          onChange={(e) => setPlanName(e.target.value)}
+        >
+          <option value="">All Plans</option>
+          <option value="Pro">Pro</option>
+          <option value="Starter">Starter</option>
+          <option value="Free">Free</option>
+        </select>
+        {/* <input
+                    type="date"
+                    value={updatedAt}
+                    onChange={handleDateChange}
+                /> */}
         <button type="submit">Search</button>
       </form>
       <div className={classes.div}>
@@ -70,9 +94,8 @@ export default function UserAnalytics() {
               <th>User E-mail</th>
               <th>Subscription</th>
               <th>Total Number of resources</th>
-              {/* <th>Resources Accessed</th> */}
               <th>Resources Left</th>
-              <th>Used Date</th>
+              <th>Updated Date</th>
             </tr>
           </thead>
           <tbody>
@@ -81,17 +104,25 @@ export default function UserAnalytics() {
                 <td>{user.userName}</td>
                 <td>{user.userEmail}</td>
                 <td>{user.planName}</td>
-                <td>{user.totalResources.map((resource:IAccessResource, index:number)=>
-                  <p key={index}>{resource.title}: {resource.access}</p>
-                )}</td>
-                
-                {/* <td>{user.accessedResources.map((resource:IAccessResource) =>
-                  `${resource.title}: ${resource.access}`
-                ).join(', ')}</td> */}
-                <td>{user.leftResources.map((resource:IAccessResource, index:number) =>
-                  <p key={index}>{resource.title}: {resource.access}</p>
-                )}</td>
-                <td>{user.updatedDate}</td>
+                <td>
+                  {user.totalResources.map(
+                    (resource: IAccessResource, index: number) => (
+                      <p key={index}>
+                        {resource.title}: {resource.access}
+                      </p>
+                    )
+                  )}
+                </td>
+                <td>
+                  {user.leftResources.map(
+                    (resource: IAccessResource, index: number) => (
+                      <p key={index}>
+                        {resource.title}: {resource.access}
+                      </p>
+                    )
+                  )}
+                </td>
+                <td>{user.updatedDate}</td> {/* Displaying updatedDate */}
               </tr>
             ))}
           </tbody>

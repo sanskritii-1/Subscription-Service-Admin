@@ -12,21 +12,48 @@ export const getUserResourceDetails = async (req: Request, res: Response, next: 
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 2;
         const skip = (page - 1) * limit;
-        //const keyword = req.query.keyword?.toString().toLowerCase();
 
         const keyword = req.query.keyword;
-        console.log(keyword);
+        const planName = req.query.planName as string;
+        const updatedAt = req.query.updatedAt as string; 
 
         const conditions: any = {};
 
         if (keyword) {
-           // const namee={$regex: new RegExp(keyword,'i')}
-           // console.log(namee);
-            
-            const users = await User.find({name:{ $regex: keyword,$options:'i' }}, '_id').lean() as Array<IUser & { _id: string }>;
+            const users = await User.find({ name: { $regex: keyword, $options: 'i' } }, '_id').lean() as Array<IUser & { _id: string }>;
             const userIds = users.map(user => user._id);
             conditions.userId = { $in: userIds };
-            console.log(conditions.userId );
+        }
+
+        if (planName) {
+            const plan = await Plan.findOne({ name: planName });
+            if (plan) {
+                const subscriptionIds = await Subscription.aggregate([
+                    { $sort: { userId: 1, startDate: -1 } },
+                    { $group: { _id: "$userId", mostRecentPlan: { $first: "$planId" } } },
+                    { $match: { mostRecentPlan: plan._id } },
+                    { $project: { userId: "$_id" } }
+                ]);                
+                const userIds = subscriptionIds.map(subscription => subscription.userId);
+                conditions.userId = { $in: userIds };
+            } else {
+                return res.status(200).json(success(200, {
+                    userDetails: [],
+                    pagination: {
+                        total: 0,
+                        page: 0,
+                        limit: 0,
+                        totalPages: 1,
+                    },
+                }));
+            }
+        }
+
+        if (updatedAt) {
+            const dateFilter = new Date(updatedAt);
+            if (!isNaN(dateFilter.getTime())) { // Check if valid date
+                conditions.updatedAt = { $gte: dateFilter }; // Apply filter for updated date
+            }
         }
 
         const userResources = await UserResource.find(conditions, 'userId leftResources')
@@ -36,7 +63,7 @@ export const getUserResourceDetails = async (req: Request, res: Response, next: 
         if (!userResources.length) {
             const err: CustomError = new Error("No user found");
             err.status = 404;
-            return next(err);
+            next(err);
         }
 
         const userDetails = await Promise.all(userResources.map(async (userResource) => {
@@ -86,8 +113,7 @@ export const getUserResourceDetails = async (req: Request, res: Response, next: 
                 }
             ]);
 
-            const updatedDate = (await UserResource.findOne<IUserResources>({userId}))?.updatedAt;
-            
+            const updatedDate = (await UserResource.findOne<IUserResources>({ userId }))?.updatedAt;
 
             return {
                 userId: userId,
