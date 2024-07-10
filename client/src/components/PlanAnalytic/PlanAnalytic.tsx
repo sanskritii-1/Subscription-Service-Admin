@@ -56,11 +56,12 @@ export default function PlanAnalytics() {
   const monthlyCounts = filteredPlans.map(plan => plan.monthlyCount);
   const revenues = filteredPlans.map(plan => plan.monthlyRevenue);
   const planNames = filteredPlans.map(plan => plan.name);
+  const allPlanNames = planAnalytics.map(plan => plan.name);
 
   const totalMonthlyRevenue = revenues.reduce((total, revenue) => total + revenue, 0);
 
   const userCountsData = {
-    labels: planNames,
+    labels: allPlanNames,
     datasets: [
       {
         label: 'Total Subscriptions',
@@ -118,7 +119,7 @@ export default function PlanAnalytics() {
             </tr>
           </thead>
           <tbody>
-            {filteredPlans && filteredPlans.map((plan) => (
+            {planAnalytics && planAnalytics.map((plan) => (
               <tr key={plan._id}>
                 <td>{plan.name}</td>
                 <td>{plan.subscribedUsersCount}</td>
