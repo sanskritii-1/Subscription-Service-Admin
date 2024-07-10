@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSendData } from "../../helper/util";
 import classes from "./UserAnalytic.module.css";
+import sortImage from "../../assets/images/sort.png"
 
 interface IAccessResource {
   title: string;
@@ -14,7 +15,8 @@ export default function UserAnalytics() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(4);
   const [totalPages, setTotalPages] = useState(1);
-  const [updatedAt, setUpdatedAt] = useState<string>(""); 
+  const [updatedAt, setUpdatedAt] = useState<string>("");
+  const [sortAsc, setSortAsc] = useState<boolean>(true);
   const sendData = useSendData();
 
   async function fetchUserAnalytics() {
@@ -61,6 +63,17 @@ export default function UserAnalytics() {
     setUpdatedAt(e.target.value);
   };
 
+  const toggleSortOrder = () => {
+    console.log("clicked")
+    setSortAsc(prev => !prev);
+    const sortedRecords = [...userAnalytics].sort((a, b) => {
+      const dateA = new Date(a.updatedDate).getTime();
+      const dateB = new Date(b.updatedDate).getTime();
+      return sortAsc ? dateB - dateA : dateA - dateB;
+    });
+    setUserAnalytics(sortedRecords);
+  };
+
   return (
     <div>
       <form onSubmit={searchHandler} className={classes.form}>
@@ -85,6 +98,11 @@ export default function UserAnalytics() {
                     onChange={handleDateChange}
                 /> */}
         <button type="submit">Search</button>
+        {/* <div className="sort-button-container">
+          <button onClick={toggleSortOrder} className="sort-button">
+            <img src={sortImage} alt='sort' className='sort-img' />
+          </button>
+        </div> */}
       </form>
       <div className={classes.div}>
         <table className={classes.table}>

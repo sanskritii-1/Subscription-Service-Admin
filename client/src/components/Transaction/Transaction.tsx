@@ -41,11 +41,10 @@ const Info: React.FC = () => {
 
   const toggleSortOrder = () => {
     setSortAsc(prev => !prev);
-    // Sort payments based on date
     const sortedPayments = [...payments].sort((a, b) => {
       const dateA = new Date(a.date).getTime();
       const dateB = new Date(b.date).getTime();
-      return sortAsc ? dateB - dateA : dateA - dateB ; // Ascending or descending
+      return sortAsc ? dateB - dateA : dateA - dateB ; 
     });
     setPayments(sortedPayments);
   };

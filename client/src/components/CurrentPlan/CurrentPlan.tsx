@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSendData } from '../../helper/util';
 import './Styling.css';
+import sortImage from "../../assets/images/sort.png"
 import { FaUser, FaEnvelope, FaCalendarAlt, FaIdBadge } from 'react-icons/fa';
 
 interface Payment {
   userName: string;
   userEmail: string;
   planName: string;
-  endDate: string;
   startDate: string;
 }
 
@@ -15,12 +15,13 @@ const CurrentPage: React.FC = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [sortAsc, setSortAsc] = useState<boolean>(true);
   const sendData = useSendData();
 
   useEffect(() => {
     const fetchCurrentPlans = async () => {
       try {
-        const response = await sendData('GET', 'get-payment-info', true);
+        const response = await sendData('GET', 'get-current-plans', true);
         console.log(response);
         setPayments(response.paymentHistory);
       } catch (error) {
@@ -36,25 +37,24 @@ const CurrentPage: React.FC = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
-  const getCurrentPlansForUniqueEmails = () => {
-    const currentDate = new Date();
-    const uniqueEmails = Array.from(new Set(payments.map(payment => payment.userEmail)));
-    const currentPlans = uniqueEmails.map(email => {
-      const user = payments.find(payment => payment.userEmail === email);
-      const plansForEmail = payments.filter(payment => payment.userEmail === email && new Date(payment.endDate) >= currentDate);
-
-      // Sort plans by startDate and take the latest one
-      const latestPlan = plansForEmail.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())[0];
-      
-      return { userName: user?.userName, userEmail: email, currentPlan: latestPlan?.planName || 'No current plans', startDate: latestPlan ? new Date(latestPlan.startDate).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'N/A'  };
+  const toggleSortOrder = () => {
+    setSortAsc(prev => !prev);
+    const sortedPayments = [...payments].sort((a, b) => {
+      const dateA = new Date(a.startDate).getTime();
+      const dateB = new Date(b.startDate).getTime();
+      return sortAsc ? dateB - dateA : dateA - dateB ; 
     });
-    return currentPlans;
+    setPayments(sortedPayments);
   };
-  const currentPlansForUniqueEmails = getCurrentPlansForUniqueEmails();
 
   return (
     <div className="table-container">
       <h2>Current Plans of Users</h2>
+      <div className="sort-button-container">
+        <button onClick={toggleSortOrder} className="sort-button">
+          <img src={sortImage} alt='sort' className='sort-img'/>
+        </button>
+      </div>
       <table className="table">
         <thead>
           <tr>
@@ -66,12 +66,12 @@ const CurrentPage: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {currentPlansForUniqueEmails.map((userData, index) => (
+          {payments.map((userData, index) => (
             <tr key={index}>
               <td>{index+1}</td>
               <td>{userData.userName}</td>
               <td>{userData.userEmail}</td>
-              <td>{userData.currentPlan}</td>
+              <td>{userData.planName}</td>
               <td>{userData.startDate}</td>
               {/* <td>{userData.currentPlans.length > 0 ? userData.currentPlans.join(', ') : 'No current plans'}</td> */}
             </tr>

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getPaymentHistory, getTransactions } from '../controllers/paymentInfo';
+import { getCurrentPlans, getTransactions } from '../controllers/paymentInfo';
 import { adminMiddleware } from "../middlewares/auth";
 import { getPlanDetails } from '../controllers/planAnalytic';
 import { getUserResourceDetails } from '../controllers/userAnalytic';
@@ -7,7 +7,7 @@ import { getUserResourceDetails } from '../controllers/userAnalytic';
 const router = Router();
 
 
-router.get('/get-payment-info', adminMiddleware, getPaymentHistory);
+router.get('/get-current-plans', adminMiddleware, getCurrentPlans);
 router.get('/get-transactions', adminMiddleware, getTransactions);
 router.get('/plan-analytics',adminMiddleware, getPlanDetails);
 router.get('/user-analytics', adminMiddleware, getUserResourceDetails);

@@ -6,23 +6,31 @@ import {success} from "../utils/response";
 import Transaction, { ITransaction } from '../models/transaction';
 import { CustomError } from '../middlewares/error';
 
-export const getPaymentHistory = async (req: Request, res: Response, next: NextFunction) => {
+export const getCurrentPlans = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const subscriptions = await Subscription.find()  
+    const subscriptions = await Subscription.aggregate([
+      { $sort: { startDate: -1 } },
+      {
+        $group: {
+          _id: '$userId',
+          subscriptionId: { $first: '$_id' },
+          startDate: { $first: '$startDate' },
+          planId: { $first: '$planId' },
+        },
+      },
+    ]); 
       
-      console.log("hii2");
+      console.log(subscriptions);
 
     const paymentHistory = await Promise.all(subscriptions.map(async (subscription) => {
-      const user = await User.findOne<IUser>({_id: subscription.userId});
-      const plan = await Plan.findOne<IPlan>({_id: subscription.planId});
+      const user = await User.findById<IUser>(subscription._id);
+      const plan = await Plan.findById<IPlan>(subscription.planId);
       return {
-        id: subscription._id,
+        id: subscription.subscriptionId,
         userName: user?.name,    
         userEmail: user?.email,   
         planName: plan?.name,     
-        startDate: subscription.startDate,
-        endDate: subscription.endDate,
-        status: subscription.endDate > new Date() ? 'active' : 'expired',
+        startDate: subscription.startDate.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }),
       };
     })
   );
