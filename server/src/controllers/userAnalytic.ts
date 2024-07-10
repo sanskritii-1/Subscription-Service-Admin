@@ -16,6 +16,7 @@ export const getUserResourceDetails = async (req: Request, res: Response, next: 
         const keyword = req.query.keyword;
         const planName = req.query.planName as string;
         const updatedAt = req.query.updatedAt as string; 
+        const isAsc = req.query.isAsc === "true";
 
         const conditions: any = {};
 
@@ -56,7 +57,9 @@ export const getUserResourceDetails = async (req: Request, res: Response, next: 
             }
         }
 
+        const sortOrder = isAsc ? 1 : -1;
         const userResources = await UserResource.find(conditions, 'userId leftResources')
+            .sort({updatedAt: sortOrder})
             .skip(skip)
             .limit(limit);
 

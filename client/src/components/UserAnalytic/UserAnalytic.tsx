@@ -13,7 +13,7 @@ export default function UserAnalytics() {
   const [planName, setPlanName] = useState("");
   const [userAnalytics, setUserAnalytics] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(4);
+  const [limit, setLimit] = useState(3);
   const [totalPages, setTotalPages] = useState(1);
   const [updatedAt, setUpdatedAt] = useState<string>("");
   const [sortAsc, setSortAsc] = useState<boolean>(true);
@@ -21,7 +21,7 @@ export default function UserAnalytics() {
 
   async function fetchUserAnalytics() {
     try {
-      let url = `user-analytics?page=${page}&limit=${limit}&keyword=${search}`;
+      let url = `user-analytics?page=${page}&limit=${limit}&keyword=${search}&isAsc=${sortAsc}`;
       if (planName) {
         url += `&planName=${planName}`;
       }
@@ -39,7 +39,7 @@ export default function UserAnalytics() {
 
   useEffect(() => {
     fetchUserAnalytics();
-  }, [page, limit, search, planName, updatedAt]);
+  }, [page, limit, search, planName, updatedAt, sortAsc]);
 
   const handleNextPage = () => {
     if (page < totalPages) {
@@ -66,12 +66,6 @@ export default function UserAnalytics() {
   const toggleSortOrder = () => {
     console.log("clicked")
     setSortAsc(prev => !prev);
-    const sortedRecords = [...userAnalytics].sort((a, b) => {
-      const dateA = new Date(a.updatedDate).getTime();
-      const dateB = new Date(b.updatedDate).getTime();
-      return sortAsc ? dateB - dateA : dateA - dateB;
-    });
-    setUserAnalytics(sortedRecords);
   };
 
   return (
@@ -98,11 +92,11 @@ export default function UserAnalytics() {
                     onChange={handleDateChange}
                 /> */}
         <button type="submit">Search</button>
-        {/* <div className="sort-button-container">
+        <div className="sort-button-container">
           <button onClick={toggleSortOrder} className="sort-button">
             <img src={sortImage} alt='sort' className='sort-img' />
           </button>
-        </div> */}
+        </div>
       </form>
       <div className={classes.div}>
         <table className={classes.table}>
