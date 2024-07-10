@@ -201,3 +201,15 @@
   font-size: 36px;
   margin-left: 50px;
 }
+
+.resource{
+  cursor: pointer;
+  color: rgb(102, 102, 236);
+  text-decoration: underline;
+  transition: color 0.3s, text-decoration 0.3s;
+}
+
+.resource:hover{
+  color: darkblue;
+  text-decoration: none;
+}

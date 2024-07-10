@@ -2,15 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useSendData } from "../../helper/util";
 import { Link, useNavigate } from "react-router-dom";
 import classes from "./Plan.module.css";
-import toast from 'react-hot-toast';
+import ResourceModal from "./ResourceModal";
 
-interface IAccessResource {
+export interface IAccessResource {
+  _id: string;
   title: string;
+  url: string;
   access: number;
 }
 
 export default function Plans() {
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<IAccessResource[]>([]);
   const navigate = useNavigate();
   const sendData = useSendData();
 
@@ -61,6 +65,23 @@ export default function Plans() {
     navigate("/");
   };
 
+  const openModal = async (planId:string) => {
+    setIsModalOpen(true);
+    try {
+      const response = await sendData("GET", `get-plan-resources/${planId}`, true);
+      setModalContent(response.resources);
+    }
+    catch (err) {
+      console.error(err);
+      // throw err;
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setModalContent([]);
+  };
+
   return (
     <div className={classes.container}>
       <div className={classes.hamburger} onClick={openSidebar}>
@@ -89,6 +110,9 @@ export default function Plans() {
       <Link to="/create" className={classes.link}>
         <div className={classes.newPlan}>+ Create New Plan</div>
       </Link>
+
+      <ResourceModal modalContent={modalContent} isModalOpen={isModalOpen} closeModal={closeModal} />
+
       <h2 className={classes.h2}>Available Subscriptions :</h2>
       <div className={classes.cards}>
         {subscriptions.map((subscription) => (
@@ -108,6 +132,10 @@ export default function Plans() {
                     ? "Unlimited Resource Access"
                     : `${subscription.resources} Resource Access`}
                 </span>
+              </div>
+              <div className={classes.cardDetail}>
+                <i className="fas fa-database"></i>
+                <span className={classes.resource} onClick={()=>{openModal(subscription._id)}}>Resources Available</span>
               </div>
               <div className={classes.cardDetail}>
                 <span className={classes.price}>${subscription.price} USD</span>

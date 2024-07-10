@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import Plan, { IPlan } from '../models/plan';
 import { success } from "../utils/response";
 import ResourceGrp, { IResourceAccess, IResourceGrp } from '../models/resourceGrp';
-import Resource, { IResource } from '../models/resource';
 import { CustomError } from '../middlewares/error';
 import mongoose from 'mongoose';
 
@@ -11,22 +10,28 @@ export const createPlan = async (req: Request, res: Response, next: NextFunction
   try {
     console.log('res array: ', req.body.resourceArray);
     const resourceArray: IResourceAccess[] = req.body.resourceArray;
-    const grpExist = await ResourceGrp.findOne<IResourceGrp>({resources: resourceArray});
+    const grpExist = await ResourceGrp.findOne<IResourceGrp>({ resources: resourceArray });
+    const planExist = await Plan.countDocuments({grpId: grpExist?._id})
     let grpId: mongoose.Types.ObjectId;
-    if(!grpExist){
-      const newGrp = new ResourceGrp({resources: resourceArray});
-      await newGrp.save();
-      grpId = newGrp._id as mongoose.Types.ObjectId;;
+    if (planExist) {
+      const err: CustomError = new Error("Same resource plan already exists");
+      err.status = 409;
+      return next(err);
     }
-    else{
-      grpId = grpExist._id as mongoose.Types.ObjectId;;
+    else if(grpExist){
+      grpId = grpExist._id as mongoose.Types.ObjectId;
+    }
+    else {
+      const newGrp = new ResourceGrp({ resources: resourceArray });
+      await newGrp.save();
+      grpId = newGrp._id as mongoose.Types.ObjectId;
     }
 
     const plan = new Plan({
       name: req.body.name,
-      resources: req.body.resources, 
-      price: req.body.price, 
-      duration: req.body.duration, 
+      resources: req.body.resources,
+      price: req.body.price,
+      duration: req.body.duration,
       features: req.body.features,
       grpId
     });
@@ -40,11 +45,11 @@ export const createPlan = async (req: Request, res: Response, next: NextFunction
 export const updatePlan = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = {
-        name: req.body.name,
-        features: req.body.features,
-        price: req.body.price,
-        duration: req.body.duration,
-        resources: req.body.resources,
+      name: req.body.name,
+      features: req.body.features,
+      price: req.body.price,
+      duration: req.body.duration,
+      resources: req.body.resources,
     }
     const plan = await Plan.findByIdAndUpdate(req.params.id, data, { new: true });
     if (!plan) {
@@ -52,7 +57,7 @@ export const updatePlan = async (req: Request, res: Response, next: NextFunction
       err.status = 404;
       return next(err);
     }
-    const grpReso = await ResourceGrp.findByIdAndUpdate(plan.grpId, {resources: req.body.resourceArray})
+    await ResourceGrp.findByIdAndUpdate(plan.grpId, { resources: req.body.resourceArray })
     return res.status(200).json(success(200, { message: 'Plan updated successfully', plan }));
   } catch (error) {
     next(error);
@@ -101,11 +106,11 @@ export const getPlans = async (req: Request, res: Response, next: NextFunction) 
   try {
     const plans = await Plan.find<IPlan>();
     console.log('get plans; ', plans)
-    if (plans.length == 0){
+    if (plans.length == 0) {
       const err: CustomError = new Error("No subscription plans found");
       err.status = 404;
       return next(err);
-    } 
+    }
 
     const planData = await Promise.all(plans.map(async (plan) => {
       const titles = await ResourceGrp.aggregate([
@@ -144,19 +149,3 @@ export const getPlans = async (req: Request, res: Response, next: NextFunction) 
     next(error);
   }
 };
-
-
-export const getResources = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
-  try {
-    const resources = await Resource.find<IResource>({}, 'title description url');
-    if (!resources) {
-      const err: CustomError = new Error("No resources found");
-      err.status = 404;
-      return next(err)
-    }
-
-    return res.status(200).json(success(200, { resources }))
-  } catch (error) {
-    next(error);
-  }
-}

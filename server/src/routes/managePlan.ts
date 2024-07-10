@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createPlan, updatePlan, deletePlan, getPlans,getPlan, getResources } from '../controllers/managePlan';
+import { createPlan, updatePlan, deletePlan, getPlans,getPlan } from '../controllers/managePlan';
 import { adminMiddleware } from "../middlewares/auth";
 import { adminLogin } from '../controllers/login';
 import { ValidationMiddleware } from '../middlewares/validation';
@@ -14,6 +14,5 @@ router.put('/manage-subscription/:id',adminMiddleware, ValidationMiddleware(plan
 router.delete('/manage-subscription/:id',adminMiddleware,deletePlan);
 router.get('/manage-subscription/:id', adminMiddleware,getPlan);
 router.get('/manage-subscription',adminMiddleware ,getPlans);
-router.get('/get-resources', adminMiddleware, getResources)
 
 export default router;
