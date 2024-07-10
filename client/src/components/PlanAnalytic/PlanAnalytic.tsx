@@ -49,11 +49,15 @@ export default function PlanAnalytics() {
     fetchPlanAnalytics();
   }, []);
 
-  const userCounts = planAnalytics.map(plan => plan.subscribedUsersCount);
-  const dailyCounts = planAnalytics.map(plan => plan.dailyCount);
-  const monthlyCounts = planAnalytics.map(plan => plan.monthlyCount);
-  const revenues = planAnalytics.map(plan => plan.monthlyRevenue);
-  const planNames = planAnalytics.map(plan => plan.name);
+  const filteredPlans = planAnalytics.filter(plan => plan.name !== "Free");
+
+  const userCounts = filteredPlans.map(plan => plan.subscribedUsersCount);
+  const dailyCounts = filteredPlans.map(plan => plan.dailyCount);
+  const monthlyCounts = filteredPlans.map(plan => plan.monthlyCount);
+  const revenues = filteredPlans.map(plan => plan.monthlyRevenue);
+  const planNames = filteredPlans.map(plan => plan.name);
+
+  const totalMonthlyRevenue = revenues.reduce((total, revenue) => total + revenue, 0);
 
   const userCountsData = {
     labels: planNames,
@@ -83,11 +87,11 @@ export default function PlanAnalytics() {
   };
 
   const revenueData = {
-    labels: planNames,
+    labels: [...planNames, 'Total Revenue'],
     datasets: [
       {
         label: 'Monthly Revenue ($)',
-        data: revenues,
+        data: [...revenues, totalMonthlyRevenue],
         backgroundColor: 'rgba(255, 159, 64, 0.2)',
         borderColor: 'rgba(255, 159, 64, 1)',
         borderWidth: 0,
@@ -102,46 +106,46 @@ export default function PlanAnalytics() {
 
   return (
     <div>
-     <div className={classes.div}>
-      <table className={classes.table}>
-        <thead>
-          <tr>
-            <th>Subscription</th>
-            <th>Total number of subscriptions</th>
-            <th>Total number of subscriptions today i.e {date} {monthName}</th>
-            <th>Total number of subscriptions this month i.e {monthName} {year}</th>
-            <th>Total Revenue for current month</th>
-          </tr>
-        </thead>
-        <tbody>
-          {planAnalytics && planAnalytics.map((user) => (
-            <tr key={user._id}>
-              <td>{user.name}</td>
-              <td>{user.subscribedUsersCount}</td>
-              <td>{user.dailyCount}</td>
-              <td>{user.monthlyCount}</td>
-              <td>${user.monthlyRevenue}</td>
+      <div className={classes.div}>
+        <table className={classes.table}>
+          <thead>
+            <tr>
+              <th>Subscription</th>
+              <th>Total number of subscriptions</th>
+              <th>Total number of subscriptions today i.e {date} {monthName}</th>
+              <th>Total number of subscriptions this month i.e {monthName} {year}</th>
+              <th>Total Revenue for current month</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredPlans && filteredPlans.map((plan) => (
+              <tr key={plan._id}>
+                <td>{plan.name}</td>
+                <td>{plan.subscribedUsersCount}</td>
+                <td>{plan.dailyCount}</td>
+                <td>{plan.monthlyCount}</td>
+                <td>${plan.monthlyRevenue}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-      <br/>
+      <br />
 
       <div className={classes.box}>
-      <div>
-        <h3>Comparison of User Subscriptions</h3>
-        <div style={{ height: '300px', width: '100%' }}>
-          <Bar data={userCountsData} options={options} />
+        <div>
+          <h3>Comparison of User Subscriptions</h3>
+          <div style={{ height: '300px', width: '100%' }}>
+            <Bar data={userCountsData} options={options} />
+          </div>
         </div>
-      </div>
 
-      <div>
-        <h3>Comparison of Monthly Revenues</h3>
-        <div style={{ height: '300px', width: '100%' }}>
-          <Bar data={revenueData} options={options} />
+        <div>
+          <h3>Comparison of Monthly Revenues</h3>
+          <div style={{ height: '300px', width: '100%' }}>
+            <Bar data={revenueData} options={options} />
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );
