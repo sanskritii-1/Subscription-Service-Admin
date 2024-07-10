@@ -138,7 +138,7 @@ export default function Plans() {
                 <span className={classes.resource} onClick={()=>{openModal(subscription._id)}}>Resources Available</span>
               </div>
               <div className={classes.cardDetail}>
-                <span className={classes.price}>${subscription.price} USD</span>
+                <span className={classes.price}>Rs. {subscription.price}</span>
               </div>
             </div>
             <div className={classes.buttonContainer}>
