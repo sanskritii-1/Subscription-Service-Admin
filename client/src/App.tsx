@@ -8,8 +8,8 @@ import SubscriptionPlans from "./pages/SubscriptionPlan";
 import LoginPage from "./pages/Login";
 import InfoPage from './pages/Transaction';
 import CurrentPlanPage from './pages/CurrentPlan';
-import PlanAnalytics from "./components/PlanAnalytic/PlanAnalytic";
-import UserAnalytics from "./components/UserAnalytic/UserAnalytic";
+import PlanAnalytics from "./pages/PlanAnalytics";
+import UserAnalytics from "./pages/UserAnalytic";
 
 
 
@@ -49,7 +49,7 @@ function App() {
     },
     {
       path: "/user-analytics",
-      element: <UserAnalytics />,
+      element: <UserAnalytics/>,
     },
   ]);
   return <RouterProvider router={routers} />;

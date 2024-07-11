@@ -84,7 +84,8 @@ export default function Plans() {
 
   return (
     <div className={classes.container}>
-      <div className={classes.hamburger} onClick={openSidebar}>
+      <br/>
+      {/* <div className={classes.hamburger} onClick={openSidebar}>
         <div></div>
         <div></div>
         <div></div>
@@ -105,14 +106,13 @@ export default function Plans() {
         <hr />
         <Link to="/" onClick={handleLogout}>Logout</Link>
         <hr />
-      </div>
+      </div>*/}
 
       <Link to="/create" className={classes.link}>
         <div className={classes.newPlan}>+ Create New Plan</div>
       </Link>
 
-      <ResourceModal modalContent={modalContent} isModalOpen={isModalOpen} closeModal={closeModal} />
-
+      <ResourceModal modalContent={modalContent} isModalOpen={isModalOpen} closeModal={closeModal} /> 
       <h2 className={classes.h2}>Available Subscriptions :</h2>
       <div className={classes.cards}>
         {subscriptions.map((subscription) => (

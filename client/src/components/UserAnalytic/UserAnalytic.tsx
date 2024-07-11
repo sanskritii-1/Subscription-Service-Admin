@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSendData } from "../../helper/util";
 import classes from "./UserAnalytic.module.css";
 import sortImage from "../../assets/images/sort.png"
+import Navbar from "../Navbar/Navbar";
 
 interface IAccessResource {
   title: string;
@@ -9,6 +10,7 @@ interface IAccessResource {
 }
 
 export default function UserAnalytics() {
+  <Navbar/>
   const [search, setSearch] = useState("");
   const [planName, setPlanName] = useState("");
   const [userAnalytics, setUserAnalytics] = useState<any[]>([]);
@@ -20,6 +22,7 @@ export default function UserAnalytics() {
   const sendData = useSendData();
 
   async function fetchUserAnalytics() {
+    
     try {
       let url = `user-analytics?page=${page}&limit=${limit}&keyword=${search}&isAsc=${sortAsc}`;
       if (planName) {
@@ -73,7 +76,7 @@ export default function UserAnalytics() {
       <form onSubmit={searchHandler} className={classes.form}>
         <input
           type="text"
-          placeholder="Search..."
+          placeholder="Search by username..."
           value={search}
           onChange={(e) => {setSearch(e.target.value); setPage(1)}}
         />

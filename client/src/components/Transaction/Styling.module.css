@@ -4,7 +4,6 @@
   text-align: center;
 }
 
-
 .paymentTable {
   width: 100%;
   border: 1px solid #0d0101;
@@ -27,7 +26,6 @@
   margin-right: 5px;
   vertical-align: middle;
 }
-
 
 .pagination {
   display: flex;
@@ -56,8 +54,10 @@
 
 .form {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  align-items: center;
   margin: 0vh 10vw;
+  gap:20px;
 }
 
 .form input {
@@ -74,24 +74,8 @@
   border-bottom-left-radius: 0;
   margin-bottom: 0.5rem;
   text-align: center;
-  height: 2rem;
-}
-
-.form select {
-  display: block;
-  width: 20%;
-  font: inherit;
-  font-size: 1.5rem;
-  padding: 0.5rem;
-  border-radius: 4px;
-  background-color: #755e6070;
-  border: none;
-  border-bottom: 2px solid #494844;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-  margin-bottom: 0.5rem;
-  text-align: center;
   height: 3rem;
+  margin-left: 5px;
 }
 
 .form button {
@@ -102,6 +86,7 @@
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
   cursor: pointer;
+  margin-left: 5px;
   font-size: 1.5rem;
   height: 3rem;
 }
@@ -114,23 +99,45 @@
 
 .sortButtonContainer {
   display: flex;
-  justify-content: flex-end; 
+  justify-content: center;
+  align-items: center;
   margin-bottom: 10px;
 }
-.sortButton{
-  left: auto;
+
+.sortButton {
   background-color: #b06e6e;
   border-radius: 5px;
   width: 40px;
   cursor: pointer;
 }
 
-.sortImg{
+.sortImg {
   height: 17px;
   width: 25px;
 }
 
-.filterButton{
+.filterButton {
   cursor: pointer;
   width: 30px;
+}
+
+.controlsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap:10px;
+  margin-bottom: 10px;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.filters select, .filters button {
+  margin-right: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
