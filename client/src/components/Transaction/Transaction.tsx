@@ -31,33 +31,51 @@ const Info: React.FC = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [sortAsc, setSortAsc] = useState<boolean>(true);
+  const [sortAsc, setSortAsc] = useState<boolean>(false);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(3);
+  const [totalPages, setTotalPages] = useState(1);
   const sendData = useSendData();
 
-  useEffect(() => {
-    const fetchPaymentHistory = async () => {
-      try {
-        const response = await sendData("GET", "get-transactions", true);
-        setPayments(response.paymentHistory);
-        console.log(response.paymentHistory);
-      } catch (error) {
-        setError("Error fetching payment history");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchPaymentHistory = async () => {
+    try {
+      const response = await sendData("GET", `get-transactions?page=${page}&limit=${limit}&keyword=${search}&isAsc=${sortAsc}`, true);
+      setPayments(response.paymentHistory);
+      setTotalPages(response.pagination.totalPages);
+      console.log(response.paymentHistory);
+    } catch (error) {
+      setError("Error fetching payment history");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchPaymentHistory();
-  }, []);
+  }, [page, limit, sortAsc, search]);
+
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage(page + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 1) {
+      setPage(page - 1);
+    }
+  };
+
+  const searchHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+    setPage(1);
+    fetchPaymentHistory();
+  };
 
   const toggleSortOrder = () => {
-    setSortAsc((prev) => !prev);
-    const sortedPayments = [...payments].sort((a, b) => {
-      const dateA = new Date(a.date).getTime();
-      const dateB = new Date(b.date).getTime();
-      return sortAsc ? dateB - dateA : dateA - dateB;
-    });
-    setPayments(sortedPayments);
+    setSortAsc(!sortAsc)
   };
 
   if (loading) return <div>Loading...</div>;
@@ -66,6 +84,20 @@ const Info: React.FC = () => {
   return (
     <div className={classes.paymentTableContainer}>
       <h2>Transactions Made</h2>
+      <form onSubmit={searchHandler} className={classes.form}>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => {setSearch(e.target.value); setPage(1)}}
+        />
+        {/* <input
+                    type="date"
+                    value={updatedAt}
+                    onChange={handleDateChange}
+                /> */}
+        <button type="submit">Search</button>
+      </form>
       <div className={classes.sortButtonContainer}>
         <button onClick={toggleSortOrder} className={classes.sortButton}>
           <img src={sortImage} alt="sort" className={classes.sortImg} />
@@ -137,6 +169,17 @@ const Info: React.FC = () => {
             ))}
         </tbody>
       </table>
+      <div className={classes.pagination}>
+        <button onClick={handlePreviousPage} disabled={page === 1}>
+          Previous
+        </button>
+        <span>
+          Page {page} of {totalPages}
+        </span>
+        <button onClick={handleNextPage} disabled={page === totalPages}>
+          Next
+        </button>
+      </div>
     </div>
   );
 };

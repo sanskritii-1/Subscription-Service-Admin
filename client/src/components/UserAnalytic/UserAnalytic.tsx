@@ -16,7 +16,7 @@ export default function UserAnalytics() {
   const [limit, setLimit] = useState(3);
   const [totalPages, setTotalPages] = useState(1);
   const [updatedAt, setUpdatedAt] = useState<string>("");
-  const [sortAsc, setSortAsc] = useState<boolean>(true);
+  const [sortAsc, setSortAsc] = useState<boolean>(false);
   const sendData = useSendData();
 
   async function fetchUserAnalytics() {
@@ -75,11 +75,11 @@ export default function UserAnalytics() {
           type="text"
           placeholder="Search..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {setSearch(e.target.value); setPage(1)}}
         />
         <select
           value={planName}
-          onChange={(e) => setPlanName(e.target.value)}
+          onChange={(e) => {setPlanName(e.target.value); setPage(1)}}
         >
           <option value="">All Plans</option>
           <option value="Pro">Pro</option>
@@ -92,12 +92,12 @@ export default function UserAnalytics() {
                     onChange={handleDateChange}
                 /> */}
         <button type="submit">Search</button>
+      </form>
         <div className="sort-button-container">
           <button onClick={toggleSortOrder} className={classes.sortButton}>
             <img src={sortImage} alt='sort' className={classes.sortImg} />
           </button>
         </div>
-      </form>
       <div className={classes.div}>
         <table className={classes.table}>
           <thead>

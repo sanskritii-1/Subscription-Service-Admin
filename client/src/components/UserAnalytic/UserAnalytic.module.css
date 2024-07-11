@@ -1,9 +1,7 @@
 .div {
   margin: 5vh auto;
   width: 80%;
-  border: 1px solid #0d0101;
   border-radius: 5px;
-  overflow: hidden;
 }
 
 .table {
@@ -110,7 +108,19 @@
   border-color: #844242;
 }
 
+.sortButtonContainer {
+  display: flex;
+  justify-content: flex-end; 
+  margin-bottom: 10px;
+}
+.sortButton{
+  left: auto;
+  background-color: #b06e6e;
+  border-radius: 5px;
+  width: 40px;
+}
+
 .sortImg{
-  height: 15px;
-  width: 15px
+  height: 17px;
+  width: 25px;
 }

@@ -49,7 +49,7 @@ export default function PlanAnalytics() {
     fetchPlanAnalytics();
   }, []);
 
-  const filteredPlans = planAnalytics.filter(plan => plan.name !== "Free");
+  const filteredPlans = planAnalytics.filter(plan => plan.price !== 0);
 
   const userCounts = filteredPlans.map(plan => plan.subscribedUsersCount);
   const dailyCounts = filteredPlans.map(plan => plan.dailyCount);
@@ -115,7 +115,7 @@ export default function PlanAnalytics() {
               <th>Total number of subscriptions</th>
               <th>Total number of subscriptions today i.e {date} {monthName}</th>
               <th>Total number of subscriptions this month i.e {monthName} {year}</th>
-              <th>Total Revenue for current month</th>
+              <th>Total Revenue for current month (Rs.)</th>
             </tr>
           </thead>
           <tbody>
@@ -125,9 +125,13 @@ export default function PlanAnalytics() {
                 <td>{plan.subscribedUsersCount}</td>
                 <td>{plan.dailyCount}</td>
                 <td>{plan.monthlyCount}</td>
-                <td>${plan.monthlyRevenue}</td>
+                <td>{plan.monthlyRevenue}</td>
               </tr>
             ))}
+            <tr>
+              <td colSpan={4} style={{fontWeight:'bold'}}>Total monthly revenue</td>
+              <td>{totalMonthlyRevenue}</td>
+            </tr>
           </tbody>
         </table>
       </div>
