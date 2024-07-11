@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useSendData } from "../../helper/util";
 import styles from "./Create.module.css";
 import classes from "./Create.module.css";
@@ -11,9 +11,9 @@ interface CheckType {
   checkProperty: boolean;
 }
 
-interface grpType{
-  rId: string,
-  access: number,
+interface grpType {
+  rId: string;
+  access: number;
 }
 
 export default function CreateForm() {
@@ -36,10 +36,10 @@ export default function CreateForm() {
       for (let i = 0; i < isChecked.length; i++) {
         if (isChecked[i].checkProperty) {
           resources++;
-          resarr.push({rId:isChecked[i].rId, access: isChecked[i].access});
+          resarr.push({ rId: isChecked[i].rId, access: isChecked[i].access });
         }
       }
-      
+
       const data = {
         name: name,
         features: features,
@@ -58,7 +58,7 @@ export default function CreateForm() {
   const handleCheckboxChange = (
     // event: React.ChangeEvent<HTMLInputElement>,
     rId: string,
-    access: number,
+    access: number
   ) => {
     setIsChecked((prev) => {
       const index = prev.findIndex((pr) => pr.rId === rId);
@@ -67,12 +67,11 @@ export default function CreateForm() {
         updatedChecks[index] = {
           ...updatedChecks[index],
           access: access,
-          checkProperty: access>0,
+          checkProperty: access > 0,
         };
         console.log("present");
         return updatedChecks;
-      } 
-      else if(access>0){
+      } else if (access > 0) {
         const newCheck = { rId, access, checkProperty: true };
         console.log("absent");
         return [...prev, newCheck];
@@ -86,12 +85,10 @@ export default function CreateForm() {
     setIsModalOpen(true);
 
     try {
-
-      const response = await sendData("GET", 'get-resources', true);
+      const response = await sendData("GET", "get-resources", true);
 
       setModalContent(response.resources);
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err);
       // throw err;
     }
@@ -126,12 +123,12 @@ export default function CreateForm() {
           onChange={(e) => setDuration(e.target.valueAsNumber)}
           required
         />
-            <label>Features(Optional):</label>
-          <input
-            type="text"
-            value={features}
-            onChange={(e) => setFeatures(e.target.value)}
-          />
+        <label>Features(Optional):</label>
+        <input
+          type="text"
+          value={features}
+          onChange={(e) => setFeatures(e.target.value)}
+        />
         <div
           style={{
             display: "flex",
@@ -154,42 +151,61 @@ export default function CreateForm() {
         </div>
         <ResourcesModal show={isModalOpen} onClose={closeModal}>
           <h2>Modal Title</h2>
-          <button onClick={closeModal} type="button" className={styles.closeButton}>
+          <button
+            onClick={closeModal}
+            type="button"
+            className={styles.closeButton}
+          >
             X
           </button>
           <div className={styles.imgContainer}>
-          {modalContent.map((res) => (
-
+            {modalContent.map((res) => (
               <div
                 key={res._id}
                 className={styles.card}
-                onClick={() => handleCheckboxChange(res._id,1)}
+                onClick={() => handleCheckboxChange(res._id, 1)}
               >
                 <input
                   type="checkbox"
                   className={styles.checkbox}
-                  checked={isChecked.find((ch) => ch.rId === res._id)?.checkProperty || false}
-                  onChange={() => handleCheckboxChange(res._id,1)}
+                  checked={
+                    isChecked.find((ch) => ch.rId === res._id)?.checkProperty ||
+                    false
+                  }
+                  onChange={() => handleCheckboxChange(res._id, 1)}
                 />
                 <h2 className={styles.title}>{res.title}</h2>
                 <img className={styles.image} src={res.url} alt={res.title} />
                 {/* <p className={styles.description}>{res.description}</p> */}
-                <input 
-                placeholder="Number of access" 
-                type="number" 
-                className={styles.accessNum}
-                value={isChecked.find((ch) => ch.rId === res._id)?.access || ''}
-                onChange={(e) => handleCheckboxChange(res._id, parseInt(e.target.value))}                
-                onClick={(e) => e.stopPropagation()}
+                <input
+                  placeholder="Number of access"
+                  type="number"
+                  className={styles.accessNum}
+                  value={
+                    isChecked.find((ch) => ch.rId === res._id)?.access || ""
+                  }
+                  onChange={(e) =>
+                    handleCheckboxChange(res._id, parseInt(e.target.value))
+                  }
+                  onClick={(e) => e.stopPropagation()}
                 />
               </div>
-          ))}
+            ))}
           </div>
           <button onClick={closeModal} type="button">
             Add
           </button>
         </ResourcesModal>
-        <button type="submit">Create Plan</button>
+        <div className={classes.flexButton}>
+          <div>
+            <button type="submit">Create Plan</button>
+          </div>
+          <div>
+            <button type="button">
+              <Link to="/subscription-plans">Cancel</Link>
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   );

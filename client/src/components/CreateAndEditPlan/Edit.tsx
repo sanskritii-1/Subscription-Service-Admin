@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { useSendData } from "../../helper/util";
 import classes from "./Edit.module.css";
 import styles from "./Edit.module.css";
@@ -236,7 +236,16 @@ export default function EditForm() {
             Add
           </button>
         </ResourcesModal>
-        <button className={classes.editButton}>Edit Plan</button>
+        <div className={classes.flexButton}>
+          <div>
+            <button type="submit" className={classes.editButton}>Save</button>
+          </div>
+          <div>
+            <button type="button">
+              <Link to="/subscription-plans">Cancel</Link>
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   );
