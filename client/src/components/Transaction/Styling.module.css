@@ -28,22 +28,6 @@
   vertical-align: middle;
 }
 
-.sortButtonContainer {
-  display: flex;
-  justify-content: flex-end; 
-  margin-bottom: 10px;
-}
-.sortButton{
-  left: auto;
-  background-color: #b06e6e;
-  border-radius: 5px;
-  width: 40px;
-}
-
-.sortImg{
-  height: 17px;
-  width: 25px;
-}
 
 .pagination {
   display: flex;
@@ -126,4 +110,27 @@
 .form button:active {
   background-color: #703d3d;
   border-color: #844242;
+}
+
+.sortButtonContainer {
+  display: flex;
+  justify-content: flex-end; 
+  margin-bottom: 10px;
+}
+.sortButton{
+  left: auto;
+  background-color: #b06e6e;
+  border-radius: 5px;
+  width: 40px;
+  cursor: pointer;
+}
+
+.sortImg{
+  height: 17px;
+  width: 25px;
+}
+
+.filterButton{
+  cursor: pointer;
+  width: 30px;
 }

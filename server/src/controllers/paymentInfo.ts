@@ -50,7 +50,8 @@ export const getTransactions = async (req: Request, res: Response, next: NextFun
 
     const keyword = req.query.keyword;
     const planName = req.query.planName as string;
-    const updatedAt = req.query.updatedAt as string;
+    const status = req.query.status as string;
+    const paymentMethod = req.query.paymentMethod as string;
     const isAsc = req.query.isAsc === "true";
 
     const conditions: any = {};
@@ -61,6 +62,20 @@ export const getTransactions = async (req: Request, res: Response, next: NextFun
       conditions.userId = { $in: userIds };
     }
 
+    if(planName){
+      const plan = await Plan.findOne<IPlan>({name: planName});
+      if(plan){
+        conditions.planId = plan._id;
+      }
+    }
+    
+    if(status){
+      conditions.status = status;
+    }
+    
+    if(paymentMethod){
+      conditions.paymentMethod = paymentMethod
+    }
 
     const sortOrder = isAsc ? 1 : -1;
     const records = await Transaction.find<ITransaction>(conditions).sort({ updatedAt: sortOrder }).skip(skip).limit(limit);

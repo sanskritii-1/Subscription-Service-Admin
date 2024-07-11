@@ -13,6 +13,7 @@ import {
   FaDollarSign,
   FaCreditCard,
   FaHourglassHalf,
+  FaFilter
 } from "react-icons/fa";
 import classes from "./Styling.module.css";
 
@@ -78,6 +79,10 @@ const Info: React.FC = () => {
     setSortAsc(!sortAsc)
   };
 
+  const filterModal = () => {
+
+  }
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -103,6 +108,7 @@ const Info: React.FC = () => {
           <img src={sortImage} alt="sort" className={classes.sortImg} />
         </button>
       </div>
+      <FaFilter onClick={filterModal} className={classes.filterButton}/>
       <table className={classes.paymentTable}>
         <thead>
           <tr>

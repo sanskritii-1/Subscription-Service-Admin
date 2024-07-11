@@ -52,8 +52,8 @@ export const getUserResourceDetails = async (req: Request, res: Response, next: 
 
         if (updatedAt) {
             const dateFilter = new Date(updatedAt);
-            if (!isNaN(dateFilter.getTime())) { // Check if valid date
-                conditions.updatedAt = { $gte: dateFilter }; // Apply filter for updated date
+            if (!isNaN(dateFilter.getTime())) { 
+                conditions.updatedAt = { $gte: dateFilter }; 
             }
         }
 
