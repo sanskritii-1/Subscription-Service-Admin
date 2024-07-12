@@ -16,7 +16,7 @@ export const adminLogin = async (req: Request, res: Response, next: NextFunction
       return next(err);
     }
 
-    const payload = { id:"abcd", email:email };
+    const payload = { id:"abcdaabe730b545ee14dd06b", email:email };
 
     const accessToken = generateAccessToken(payload);
     return res.status(200).json(success(200,{message:"admin login successful", token: accessToken}));

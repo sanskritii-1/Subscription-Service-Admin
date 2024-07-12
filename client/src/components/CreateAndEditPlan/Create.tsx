@@ -4,8 +4,9 @@ import { useSendData } from "../../helper/util";
 import styles from "./Create.module.css";
 import classes from "./Create.module.css";
 import ResourcesModal from "./ResourcesModal";
+import toast from "react-hot-toast";
 
-interface CheckType {
+export interface CheckType {
   rId: string;
   access: number;
   checkProperty: boolean;
@@ -40,6 +41,11 @@ export default function CreateForm() {
         }
       }
       
+      if(resources===0){
+        toast.error("Atleast one resource should be added");
+        throw new Error("No resource added");
+      }
+
       const data = {
         name: name,
         features: features,
@@ -55,11 +61,28 @@ export default function CreateForm() {
     }
   };
 
-  const handleCheckboxChange = (
-    // event: React.ChangeEvent<HTMLInputElement>,
-    rId: string,
-    access: number,
-  ) => {
+  const handleCheckboxChange = (rId: string) => {
+    setIsChecked((prev) => {
+      const index = prev.findIndex((pr) => pr.rId === rId);
+      if (index >= 0) {
+        const updatedChecks = [...prev];
+        updatedChecks[index] = {
+          ...updatedChecks[index],
+          access: !updatedChecks[index].checkProperty ? 1 : 0,
+          checkProperty: !updatedChecks[index].checkProperty,
+        };
+        console.log("present");
+        return updatedChecks;
+      } 
+      else {
+        const newCheck = { rId, access:1, checkProperty: true };
+        console.log("absent");
+        return [...prev, newCheck];
+      }
+    });
+    console.log(isChecked);
+  };
+  const handleAccessChange = (rId: string, access: number)=>{
     setIsChecked((prev) => {
       const index = prev.findIndex((pr) => pr.rId === rId);
       if (index >= 0) {
@@ -79,8 +102,7 @@ export default function CreateForm() {
       }
       return prev;
     });
-    console.log(isChecked);
-  };
+  }
 
   const openModal = async () => {
     setIsModalOpen(true);
@@ -112,14 +134,14 @@ export default function CreateForm() {
           onChange={(e) => setName(e.target.value)}
           required
         />
-        <label>Price of Plan:</label>
+        <label>Price of Plan(in Rs.):</label>
         <input
           type="number"
           value={price}
           onChange={(e) => setPrice(e.target.valueAsNumber)}
           required
         />
-        <label>Duration:</label>
+        <label>Duration(in Months):</label>
         <input
           type="number"
           value={duration}
@@ -152,45 +174,17 @@ export default function CreateForm() {
             </button>
           </div>
         </div>
-        <ResourcesModal show={isModalOpen} onClose={closeModal}>
-          <h2>Modal Title</h2>
-          <button onClick={closeModal} type="button" className={styles.closeButton}>
-            X
-          </button>
-          <div className={styles.imgContainer}>
-          {modalContent.map((res) => (
-
-              <div
-                key={res._id}
-                className={styles.card}
-                onClick={() => handleCheckboxChange(res._id,1)}
-              >
-                <input
-                  type="checkbox"
-                  className={styles.checkbox}
-                  checked={isChecked.find((ch) => ch.rId === res._id)?.checkProperty || false}
-                  onChange={() => handleCheckboxChange(res._id,1)}
-                />
-                <h2 className={styles.title}>{res.title}</h2>
-                <img className={styles.image} src={res.url} alt={res.title} />
-                {/* <p className={styles.description}>{res.description}</p> */}
-                <input 
-                placeholder="Number of access" 
-                type="number" 
-                className={styles.accessNum}
-                value={isChecked.find((ch) => ch.rId === res._id)?.access || ''}
-                onChange={(e) => handleCheckboxChange(res._id, parseInt(e.target.value))}                
-                onClick={(e) => e.stopPropagation()}
-                />
-              </div>
-          ))}
-          </div>
-          <button onClick={closeModal} type="button">
-            Add
-          </button>
-        </ResourcesModal>
+          
         <button type="submit">Create Plan</button>
       </form>
+        <ResourcesModal 
+        show={isModalOpen} 
+        closeModal={closeModal} 
+        modalContent={modalContent} 
+        handleCheckboxChange={handleCheckboxChange} 
+        handleAccessChange={handleAccessChange}
+        isChecked={isChecked}
+        />
     </div>
   );
 }

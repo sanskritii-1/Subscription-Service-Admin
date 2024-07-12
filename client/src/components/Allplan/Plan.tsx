@@ -85,28 +85,7 @@ export default function Plans() {
   return (
     <div className={classes.container}>
       <br/>
-      {/* <div className={classes.hamburger} onClick={openSidebar}>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <br />
-
-      <div id="mySidebar" className={classes.sidebar}>
-        <a href="javascript:void(0)" className={classes.closebtn} onClick={closeSidebar}>
-          &times;
-        </a>
-        <Link to="/user-analytics">User Analytics</Link>
-        <hr />
-        <Link to="/plan-analytics">Plan Analytics</Link>
-        <hr />
-        <Link to="/current-plans">Current Plan</Link>
-        <hr />
-        <Link to="/PaymentInfo">Transaction History</Link>
-        <hr />
-        <Link to="/" onClick={handleLogout}>Logout</Link>
-        <hr />
-      </div>*/}
+      
 
       <Link to="/create" className={classes.link}>
         <div className={classes.newPlan}>+ Create New Plan</div>
