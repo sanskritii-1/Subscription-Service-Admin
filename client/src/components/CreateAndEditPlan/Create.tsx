@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useSendData } from "../../helper/util";
 import styles from "./Create.module.css";
 import classes from "./Create.module.css";
@@ -12,9 +12,9 @@ export interface CheckType {
   checkProperty: boolean;
 }
 
-interface grpType{
-  rId: string,
-  access: number,
+interface grpType {
+  rId: string;
+  access: number;
 }
 
 export default function CreateForm() {
@@ -37,7 +37,7 @@ export default function CreateForm() {
       for (let i = 0; i < isChecked.length; i++) {
         if (isChecked[i].checkProperty) {
           resources++;
-          resarr.push({rId:isChecked[i].rId, access: isChecked[i].access});
+          resarr.push({ rId: isChecked[i].rId, access: isChecked[i].access });
         }
       }
       
@@ -90,12 +90,11 @@ export default function CreateForm() {
         updatedChecks[index] = {
           ...updatedChecks[index],
           access: access,
-          checkProperty: access>0,
+          checkProperty: access > 0,
         };
         console.log("present");
         return updatedChecks;
-      } 
-      else if(access>0){
+      } else if (access > 0) {
         const newCheck = { rId, access, checkProperty: true };
         console.log("absent");
         return [...prev, newCheck];
@@ -108,12 +107,10 @@ export default function CreateForm() {
     setIsModalOpen(true);
 
     try {
-
-      const response = await sendData("GET", 'get-resources', true);
+      const response = await sendData("GET", "get-resources", true);
 
       setModalContent(response.resources);
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err);
       // throw err;
     }
@@ -148,12 +145,12 @@ export default function CreateForm() {
           onChange={(e) => setDuration(e.target.valueAsNumber)}
           required
         />
-            <label>Features(Optional):</label>
-          <input
-            type="text"
-            value={features}
-            onChange={(e) => setFeatures(e.target.value)}
-          />
+        <label>Features(Optional):</label>
+        <input
+          type="text"
+          value={features}
+          onChange={(e) => setFeatures(e.target.value)}
+        />
         <div
           style={{
             display: "flex",
@@ -175,7 +172,17 @@ export default function CreateForm() {
           </div>
         </div>
           
-        <button type="submit">Create Plan</button>
+        <div className={classes.flexButton}>
+          <div>
+            <button type="submit">Create Plan</button>
+          </div>
+          <div>
+            <button type="button">
+              <Link to="/subscription-plans">Cancel</Link>
+            </button>
+          </div>
+        </div>
+        
       </form>
         <ResourcesModal 
         show={isModalOpen} 

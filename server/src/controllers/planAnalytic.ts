@@ -30,6 +30,7 @@ export const getPlanDetails = async (req: Request, res: Response, next: NextFunc
             return {
                 _id: plan._id,
                 name: plan.name,
+                price: plan.price,
                 subscribedUsersCount,
                 dailyCount,
                 monthlyCount,

@@ -96,12 +96,12 @@ export default function UserAnalytics() {
                 /> */}
         <button type="submit">Search</button>
       </form>
-        <div className="sort-button-container">
+      <div className={classes.div}>
+        <div className={classes.sortButtonContainer}>
           <button onClick={toggleSortOrder} className={classes.sortButton}>
             <img src={sortImage} alt='sort' className={classes.sortImg} />
           </button>
         </div>
-      <div className={classes.div}>
         <table className={classes.table}>
           <thead>
             <tr>

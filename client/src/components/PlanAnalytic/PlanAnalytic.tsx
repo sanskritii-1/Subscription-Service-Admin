@@ -51,9 +51,9 @@ export default function PlanAnalytics() {
 
   const filteredPlans = planAnalytics.filter(plan => plan.price !== 0);
 
-  const userCounts = filteredPlans.map(plan => plan.subscribedUsersCount);
-  const dailyCounts = filteredPlans.map(plan => plan.dailyCount);
-  const monthlyCounts = filteredPlans.map(plan => plan.monthlyCount);
+  const userCounts = planAnalytics.map(plan => plan.subscribedUsersCount);
+  const dailyCounts = planAnalytics.map(plan => plan.dailyCount);
+  const monthlyCounts = planAnalytics.map(plan => plan.monthlyCount);
   const revenues = filteredPlans.map(plan => plan.monthlyRevenue);
   const planNames = filteredPlans.map(plan => plan.name);
   const allPlanNames = planAnalytics.map(plan => plan.name);
